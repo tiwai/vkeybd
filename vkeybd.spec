@@ -11,7 +11,7 @@ BuildRoot: /tmp/rpmtest
 URL: http//members.tripod.de/iwai/awedrv.html
 %description
 ====================================================================
-		VIRTUAL KEYBOARD ver.0.1.7
+		VIRTUAL KEYBOARD ver.0.1.9
 		Takashi Iwai  <tiwai@suse.de>
 ====================================================================
 
@@ -44,7 +44,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %package -n vkeybd-ossonly
 ====================================================================
-		VIRTUAL KEYBOARD ver.0.1.8
+		VIRTUAL KEYBOARD ver.0.1.9
 		Takashi Iwai  <tiwai@suse.de>
 ====================================================================
 
@@ -58,7 +58,7 @@ This program supports:
   - Raw MIDI device on OSS
 %description
 ====================================================================
-		VIRTUAL KEYBOARD ver.0.1.8
+		VIRTUAL KEYBOARD ver.0.1.9
 		Takashi Iwai  <tiwai@suse.de>
 ====================================================================
 

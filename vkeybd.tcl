@@ -178,7 +178,7 @@ proc KeyMotion {key x y s} {
 	}
 	return
     }
-    set new [lindex [$keywin find overlapping $x $y $x $y] 0]
+    set new [lindex [$keywin find overlapping $x $y $x $y] end]
     if {$new != $activekey} {
 	if {$activekey != ""} {
 	    KeyStop $keyindex($activekey) 1
@@ -188,7 +188,6 @@ proc KeyMotion {key x y s} {
 	}
     }
 }
-
 #----------------------------------------------------------------
 # midi controls
 

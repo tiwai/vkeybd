@@ -80,7 +80,7 @@ int main(int argc, char **argv)
 #ifdef HAVE_LADCCA	
 	cca_client = cca_init (cca_extract_args (&argc, &argv),
 	                       "vkeybd",
-	                       CCA_Use_Alsa);
+	                       CCA_Use_Alsa, CCA_PROTOCOL_VERSION);
 #endif /* HAVE_LADCCA */
 
 	nargc = argc + 1;

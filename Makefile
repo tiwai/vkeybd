@@ -92,7 +92,6 @@ install: $(TARGETS) vkeybd.tcl vkeybd.list
 	mkdir -p $(VKBLIB_DIR)
 	install -c -m 444 vkeybd.tcl $(VKBLIB_DIR)
 	install -c -m 444 vkeybd.list $(VKBLIB_DIR)
-	install -c -m 444 vkeybd.key $(VKBLIB_DIR)
 
 install-man:
 	mkdir -p $(MAN_DIR)

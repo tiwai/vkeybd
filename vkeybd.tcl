@@ -80,8 +80,8 @@ proc KeybdCreate {w} {
     foreach i $keymap {
 	set key [lindex $i 0]
 	set note [lindex $i 1]
-	bind $w <KeyPress-$key> [list KeyStart $note 0]
-	bind $w <KeyRelease-$key> [list KeyStop $note 0]
+	bind $w <KeyPress-$key> [list KeyQueue 1 $note 0]
+	bind $w <KeyRelease-$key> [list KeyQueue 0 $note 0]
     }
 
     #
@@ -91,6 +91,52 @@ proc KeybdCreate {w} {
     bind $w <Control-c> {exit 0}
     bind $w <Key-q> {exit 0}
     focus $w
+}
+
+#----------------------------------------------------------------
+# key press/release, filter autorepeats
+#
+# a nice hack by Roger E Critchlow Jr <rec@elf.org>
+#
+
+set KeyEventQueue {}
+
+proc KeyQueue {type note time} {
+    global KeyEventQueue
+    lappend KeyEventQueue $type $note $time
+    after idle KeyProcessQueue
+}
+
+proc KeyProcessQueue {} {
+    global KeyEventQueue
+    while {1} {
+	switch [llength $KeyEventQueue] {
+	    0 return
+	    3 {
+		foreach {type note time} $KeyEventQueue break
+		KeyProcess $type $note $time
+		set KeyEventQueue [lrange $KeyEventQueue 3 end]
+	    }
+	    default {
+		foreach {type1 note1 time1 type2 note2 time2} $KeyEventQueue break
+		if {$note1 == $note2 && $time1 == $time2 && $type1 == 0 && $type2 == 1} {
+		    set KeyEventQueue [lrange $KeyEventQueue 6 end]
+		    continue;
+		} else {
+		    KeyProcess $type1 $note1 $time1
+		    set KeyEventQueue [lrange $KeyEventQueue 3 end]
+		}
+	    }
+	}
+    }
+}		
+
+proc KeyProcess {type note time} {
+    if {$type} {
+	KeyStart $note 0
+    } else {
+	KeyStop $note 0
+    }
 }
 
 #----------------------------------------------------------------

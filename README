@@ -1,5 +1,5 @@
 ====================================================================
-		VIRTUAL KEYBOARD ver.0.1.10
+		VIRTUAL KEYBOARD ver.0.1.11
 		Takashi Iwai  <tiwai@suse.de>
 ====================================================================
 
@@ -161,8 +161,9 @@ KEYBOARD
 --------
 
 Each visible key is mapped on your computer keyboard from 'z' to '\'.
-To use the computer keyboard, you should turn off auto repeat on your
-X display via "xset -r".
+On the version 0.1.11, the key auto-repeat is filtered so that only
+one note is generated.  Thus you no longer have to turn off auto
+repeat via "xset -r".
 
 The key assignment can be changed by editting the config file
 ~/.vkeybdrc.  Once save the current configuration via File/Save Config

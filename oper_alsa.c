@@ -142,9 +142,11 @@ seq_open(Tcl_Interp *ip, void **private_return)
 	my_client = snd_seq_client_id(seq_handle);
 
 	/* set client info */
+#if 0
 	if ((var = Tcl_GetVar2(ip, "optvar", "name", TCL_GLOBAL_ONLY)) != NULL)
 		snd_seq_set_client_name(seq_handle, var);
 	else
+#endif
 		snd_seq_set_client_name(seq_handle, DEFAULT_NAME);
 	snd_seq_set_client_group(seq_handle, "input");
 
@@ -152,9 +154,11 @@ seq_open(Tcl_Interp *ip, void **private_return)
 	caps = SND_SEQ_PORT_CAP_READ;
 	if (seq_client == SND_SEQ_ADDRESS_SUBSCRIBERS)
 		caps |= SND_SEQ_PORT_CAP_SUBS_READ;
+#if 0
 	if ((var = Tcl_GetVar2(ip, "optvar", "name", TCL_GLOBAL_ONLY)) != NULL)
 		name = var;
 	else
+#endif
 		name = DEFAULT_NAME;
 	my_port = snd_seq_create_simple_port(seq_handle, name, caps,
 					     SND_SEQ_PORT_TYPE_APPLICATION);

@@ -11,6 +11,7 @@
 	* fixed compile warnings (with the recent tcl/tk)
 	* LADCCA support
 	* README clean up
+	* added vkeybdrc_german example by Matthias Nagorni
 	
 2002-07-25	ver.0.1.12
 	* don't override default key-bindings if defined

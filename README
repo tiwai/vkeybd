@@ -29,7 +29,7 @@ The following values can be configurable:
 
   - PREFIX
       Destination directory prefix (e.g. /usr/local)
-  - INSTALL_DIR
+  - BIN_DIR
       Destination directory where the program will be installed.
   - VKLIB_DIR
       Directory where vkeybd Tcl file, key list and preset list files

@@ -10,7 +10,7 @@ VERSION = 0.1.13
 #
 PREFIX = /usr/local
 # binary and Tcl script are put there
-INSTALL_DIR = $(PREFIX)/bin
+BIN_DIR = $(PREFIX)/bin
 # man page
 MAN_SUFFIX = 1
 MAN_DIR = $(PREFIX)/share/man
@@ -32,9 +32,10 @@ USE_LADCCA = 0
 #
 # Tcl/Tk library -- depends on your distribution
 #
-TCLLIB = -ltcl8.4
+TCL_VERSION = 8.4
+TCLLIB = -ltcl$(TCL_VERSION)
 TCLINC =
-TKLIB = -L/usr/X11R6/lib -ltk8.4
+TKLIB = -ltk$(TCL_VERSION)
 TKINC =
 XLIB = -L/usr/X11R6/lib -lX11
 XINC = -I/usr/X11R6/include
@@ -96,17 +97,17 @@ sftovkb: sftovkb.o sffile.o malloc.o fskip.o
 	$(CC) -o $@ $^ -lm
 
 install: $(TARGETS) vkeybd.tcl vkeybd.list
-	mkdir -p $(INSTALL_DIR)
-	install -c -s vkeybd $(INSTALL_DIR)
-	install -c -s sftovkb $(INSTALL_DIR)
-	rm -f $(INSTALL_DIR)/vkeybd.tcl
-	mkdir -p $(VKBLIB_DIR)
-	install -c -m 444 vkeybd.tcl $(VKBLIB_DIR)
-	install -c -m 444 vkeybd.list $(VKBLIB_DIR)
+	mkdir -p $(DESTDIR)$(BIN_DIR)
+	install -c -s vkeybd $(DESTDIR)$(BIN_DIR)
+	install -c -s sftovkb $(DESTDIR)$(BIN_DIR)
+	rm -f $(DESTDIR)$(BIN_DIR)/vkeybd.tcl
+	mkdir -p $(DESTDIR)$(VKBLIB_DIR)
+	install -c -m 444 vkeybd.tcl $(DESTDIR)$(VKBLIB_DIR)
+	install -c -m 444 vkeybd.list $(DESTDIR)$(VKBLIB_DIR)
 
 install-man:
-	mkdir -p $(MAN_DIR)/man$(MAN_SUFFIX)
-	install -c -m 444 vkeybd.man $(MAN_DIR)/man$(MAN_SUFFIX)/vkeybd.$(MAN_SUFFIX)
+	mkdir -p $(DESTDIR)$(MAN_DIR)/man$(MAN_SUFFIX)
+	install -c -m 444 vkeybd.man $(DESTDIR)$(MAN_DIR)/man$(MAN_SUFFIX)/vkeybd.$(MAN_SUFFIX)
 
 install-all: install install-man
 

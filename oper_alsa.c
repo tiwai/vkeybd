@@ -20,8 +20,6 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#define USE_COMPAT_CONST
-
 #include "vkb.h"
 #include <unistd.h>
 #include <ctype.h>
@@ -105,7 +103,7 @@ static int chan_no;
 
 #define ADDR_DELIM	".:"
 
-static int parse_addr(char *arg, int *client, int *port)
+static int parse_addr(const char *arg, int *client, int *port)
 {
 	char *p;
 
@@ -132,7 +130,7 @@ static int parse_addr(char *arg, int *client, int *port)
 static int
 seq_open(Tcl_Interp *ip, void **private_return)
 {
-	char *var, *name;
+	const char *var, *name;
 	unsigned int caps;
 
 	/* copy from Tcl variables */

@@ -20,7 +20,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#define USE_COMPAT_CONST
+#define USE_NO_CONST
 
 #include "vkb.h"
 #include <stdlib.h>
@@ -113,8 +113,8 @@ static int awe_dev;
 static int
 seq_open(Tcl_Interp *ip, void **private_return)
 {
-	char *var;
-	char *seqdev = SEQUENCER_DEV;
+	const char *var;
+	const char *seqdev = SEQUENCER_DEV;
 	int nrsynths;
 	struct synth_info card_info;
 	int i;

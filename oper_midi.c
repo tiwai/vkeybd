@@ -20,7 +20,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#define USE_COMPAT_CONST
+#define USE_NO_CONST
 
 #include "vkb.h"
 #include <stdlib.h>
@@ -92,8 +92,8 @@ static int chan_no;
 static int
 seq_open(Tcl_Interp *ip, void **private_return)
 {
-	char *mididev = MIDI_DEV;
-	char *var;
+	const char *mididev = MIDI_DEV;
+	const char *var;
 
 	var = Tcl_GetVar2(ip, "optvar", "mididev", TCL_GLOBAL_ONLY);
 	if (var != NULL && *var)

@@ -20,8 +20,6 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#define USE_COMPAT_CONST
-
 #include "vkb.h"
 #include <stdio.h>
 #include <stdarg.h>
@@ -45,16 +43,16 @@
  * prototypes
  */
 
-static int usage(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
-static int seq_on(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
-static int seq_off(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
-static int seq_start_note(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
-static int seq_stop_note(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
-static int seq_control(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
-static int seq_program(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
-static int seq_bender(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
-static int seq_chorus_mode(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
-static int seq_reverb_mode(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
+static int usage(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]);
+static int seq_on(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]);
+static int seq_off(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]);
+static int seq_start_note(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]);
+static int seq_stop_note(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]);
+static int seq_control(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]);
+static int seq_program(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]);
+static int seq_bender(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]);
+static int seq_chorus_mode(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]);
+static int seq_reverb_mode(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]);
 static int vkb_app_init(Tcl_Interp *interp);
 
 /*
@@ -112,7 +110,7 @@ int main(int argc, char **argv)
  * print usage
  */
 static int
-usage(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+usage(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
 	int i;
 
@@ -149,10 +147,10 @@ usage(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 
 /* open device */
 static int
-seq_on(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+seq_on(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
 	int i;
-	char *var;
+	const char *var;
 	
 	if (seq_opened)
 		return TCL_OK;
@@ -189,7 +187,7 @@ seq_on(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 
 /* close device */
 static int
-seq_off(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+seq_off(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
 	if (seq_opened) {
 		oper->close(interp, private);
@@ -200,7 +198,7 @@ seq_off(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 }
 
 static int
-seq_start_note(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+seq_start_note(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
 	int note, vel;
 	if (argc < 3)
@@ -215,7 +213,7 @@ seq_start_note(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]
 }
 
 static int
-seq_stop_note(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+seq_stop_note(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
 	int note, vel;
 	if (argc < 3)
@@ -230,7 +228,7 @@ seq_stop_note(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 }
 
 static int
-seq_control(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+seq_control(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
 	int type, val;
 	if (argc < 3)
@@ -245,7 +243,7 @@ seq_control(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 }
 
 static int
-seq_program(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+seq_program(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
 	if (argc < 3)
 		return TCL_ERROR;
@@ -259,7 +257,7 @@ seq_program(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 }
 
 static int
-seq_bender(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+seq_bender(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
 	if (argc < 2)
 		return TCL_ERROR;
@@ -272,7 +270,7 @@ seq_bender(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 }
 
 static int
-seq_chorus_mode(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+seq_chorus_mode(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
 	if (argc < 2)
 		return TCL_ERROR;
@@ -284,7 +282,7 @@ seq_chorus_mode(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[
 }
 
 static int
-seq_reverb_mode(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+seq_reverb_mode(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
 	if (argc < 2)
 		return TCL_ERROR;
@@ -314,7 +312,7 @@ vkb_error(Tcl_Interp *ip, char *fmt, ...)
 int
 vkb_get_int(Tcl_Interp *ip, char *opt, int *ret)
 {
-	char *var;
+	const char *var;
 	if ((var = Tcl_GetVar2(ip, "optvar", opt, TCL_GLOBAL_ONLY)) != NULL && *var) {
 		*ret = atoi(var);
 		return 1;

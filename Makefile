@@ -21,7 +21,7 @@ DATA_DIR = $(PREFIX)/share
 #
 # preset and keyboard file are put here
 #
-DATA_DIR = $(DATA_DIR)/vkeybd
+VKBLIB_DIR = $(DATA_DIR)/vkeybd
 
 #
 # device selections -- multiple avaialble

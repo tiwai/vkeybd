@@ -32,6 +32,10 @@
 #if SND_LIB_MINOR >= 6
 #define snd_seq_flush_output(x) snd_seq_drain_output(x)
 #define snd_seq_set_client_group(x,name) /*nop*/
+#define my_snd_seq_open(seqp) snd_seq_open(seqp, "hw", SND_SEQ_OPEN_OUTPUT, 0)
+#else
+/* SND_SEQ_OPEN_OUT causes oops on early version of ALSA */
+#define my_snd_seq_open(seqp) snd_seq_open(seqp, SND_SEQ_OPEN)
 #endif
 
 /*
@@ -133,8 +137,7 @@ seq_open(Tcl_Interp *ip, void **private_return)
 		}
 	}
 	
-	if (snd_seq_open(&seq_handle, SND_SEQ_OPEN /*SND_SEQ_OPEN_OUT*/) < 0) {
-		/* SND_SEQ_OPEN_OUT causes oops on early version of ALSA */
+	if (my_snd_seq_open(&seq_handle) < 0) {
 		vkb_error(ip, "can't open sequencer device");
 		return 0;
 	}

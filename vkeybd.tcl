@@ -39,6 +39,20 @@ set keymap {
 #----------------------------------------------------------------
 # create virtual keyboard
 
+proc CheckKeymap {target} {
+    global keymap keywin
+    puts stderr "checking keymap $target"
+    foreach i $keymap {
+	set key [lindex $i 0]
+        puts stderr "check: $key"
+        if {$key == $target} {
+	    puts stderr "keymap found.."
+	    return 0
+	}
+    }
+    return 1
+}
+
 proc KeybdCreate {w} {
     global keycolor keywid keyitem keyindex keyhgt keymap keywin
     global optvar
@@ -87,9 +101,13 @@ proc KeybdCreate {w} {
     #
     # some special key sequences
     #
-    bind $w <Key-Escape> {SeqOff; ResetControls}
+    if [CheckKeymap Escape] {
+	bind $w <Key-Escape> {SeqOff; ResetControls}
+    }
+    if [CheckKeymap q] {
+	bind $w <Key-q> {exit 0}
+    }
     bind $w <Control-c> {exit 0}
-    bind $w <Key-q> {exit 0}
     focus $w
 }
 

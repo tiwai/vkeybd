@@ -59,7 +59,7 @@ endif
 ifeq (1,$(USE_ALSA))
 DEVICES += -DVKB_USE_ALSA
 DEVOBJS += oper_alsa.o
-EXTRALIB += -L/usr/local/lib -lasound
+EXTRALIB += -lasound
 endif
 
 

@@ -41,12 +41,10 @@ set keymap {
 
 proc CheckKeymap {target} {
     global keymap keywin
-    puts stderr "checking keymap $target"
     foreach i $keymap {
 	set key [lindex $i 0]
         puts stderr "check: $key"
         if {$key == $target} {
-	    puts stderr "keymap found.."
 	    return 0
 	}
     }

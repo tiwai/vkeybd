@@ -27,7 +27,11 @@
 #include <string.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
+#ifdef USE_OLD_ALSA
 #include <sys/asoundlib.h>
+#else
+#include <alsa/asoundlib.h>
+#endif
 
 #if SND_LIB_MINOR >= 6
 #define snd_seq_flush_output(x) snd_seq_drain_output(x)
@@ -144,7 +148,20 @@ seq_open(Tcl_Interp *ip, void **private_return)
 
 	/* get my client id */
 	my_client = snd_seq_client_id(seq_handle);
-
+	
+	/* tell the ladcca server our client id */
+#ifdef HAVE_LADCCA
+	if (cca_enabled (cca_client)) {
+		cca_event_t * event;
+		unsigned char id[2];
+		event = cca_event_new_with_type (CCA_Alsa_Client_ID);
+		id[0] = snd_seq_client_id (seq_handle);
+		id[1] = '\0';
+		cca_event_set_string (event, id);
+		cca_send_event (cca_client, event);
+ 	}
+#endif /* HAVE_LADCCA */
+ 
 	/* set client info */
 	if ((var = Tcl_GetVar2(ip, "optvar", "name", TCL_GLOBAL_ONLY)) != NULL)
 		snd_seq_set_client_name(seq_handle, var);
@@ -171,7 +188,11 @@ seq_open(Tcl_Interp *ip, void **private_return)
 
 	if (seq_client != SND_SEQ_ADDRESS_SUBSCRIBERS) {
 		/* subscribe to MIDI port */
-		if (snd_seq_connect_to(seq_handle, my_port, seq_client, seq_port) < 0) {
+		if (
+#ifdef HAVE_LADCCA
+		    !cca_enabled (cca_client) &&
+#endif
+		    snd_seq_connect_to(seq_handle, my_port, seq_client, seq_port) < 0) {
 			vkb_error(ip, "can't subscribe to MIDI port (%d:%d)\n", seq_client, seq_port);
 			snd_seq_close(seq_handle);
 			return 0;

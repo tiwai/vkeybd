@@ -63,6 +63,10 @@ static int seq_bank = 0, seq_preset = 0;
 static int seq_bend = 0;
 static vkb_oper_t *oper;
 
+#ifdef HAVE_LADCCA	
+cca_client_t * cca_client = NULL;
+#endif
+ 
 /*
  * main routine
  */
@@ -71,6 +75,12 @@ int main(int argc, char **argv)
 {
 	char **nargv;
 	int c, nargc;
+
+#ifdef HAVE_LADCCA	
+	cca_client = cca_init (cca_extract_args (&argc, &argv),
+	                       "vkeybd",
+	                       CCA_Use_Alsa);
+#endif /* HAVE_LADCCA */
 
 	nargc = argc + 1;
 	if ((nargv = (char**)malloc(sizeof(char*) * nargc)) == NULL) {

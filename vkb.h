@@ -23,6 +23,10 @@
 
 #include <tcl.h>
 
+#ifdef HAVE_LADCCA
+#include <ladcca/ladcca.h>
+#endif
+
 #ifndef VKB_TCLFILE
 #define VKB_TCLFILE "/usr/local/bin/vkeybd.tcl"
 #endif
@@ -67,5 +71,9 @@ extern vkb_devinfo_t *vkb_device[];
 
 void vkb_error(Tcl_Interp *ip, char *fmt, ...);
 int vkb_get_int(Tcl_Interp *ip, char *opt, int *ret);
+
+#ifdef HAVE_LADCCA
+extern cca_client_t * cca_client;
+#endif
 
 #endif

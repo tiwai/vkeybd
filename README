@@ -1,5 +1,5 @@
 ====================================================================
-		VIRTUAL KEYBOARD ver.0.1.11
+		VIRTUAL KEYBOARD ver.0.1.13
 		Takashi Iwai  <tiwai@suse.de>
 ====================================================================
 
@@ -12,7 +12,7 @@ Enjoy a music with your mouse and "computer" keyboard :-)
 
 The program requires Tcl7.5/Tk4.1 or newer libraries.
 This program supports:
-  - ALSA sequencer (ver.0.5.2)
+  - ALSA sequencer (ver.0.5.x or 0.9.x)
   - AWE driver on OSS  (ver.0.4.3)
   - MIDI device on OSS and ALSA
 Since the most of the part is written by Tcl/Tk script, it'll be not
@@ -45,6 +45,10 @@ The following values can be configurable:
       Device selection.  Multiple devices are available.
       To disable a device, set the value 0.  Do not undefine it.
       At least one of them must have non-zero value.
+
+  - USE_LADCCA
+      Supports LADCCA (http://pkl.net/~node/software/)
+      Set 1 to add the this support.
 
   - TCLLIB
       Tcl library for linking, given as "-lxxx"
@@ -174,8 +178,56 @@ The keymap is a list of elements consisting on the key symbol and the
 corresponding note offset.  The key symbol is the X key symbol for
 assigned key, and note offset is the shifted note number from note key
 of beginning of keyboard, which is changed by "Key" scalebar.
-For example, when a pair of {a 8} is defined and the lowest MIDI key
-is 48, a MIDI note 56 will be turned on by pressing the key 'a'.
+See the next section for details.
+
+CHANGING THE KEYMAP
+-------------------
+
+The step for changing the keymap manually is like this.
+
+1. Save the current configuration by "File / Save Config" menu.
+   You'll have ~/.vkeybdrc file.
+
+2. Edit it using your favorite text editor.
+   There is a list of keymap definitions such as
+
+	set keymap {
+	  {a 8}
+	  {z 9}
+	  {s 10}
+	  {x 11}
+	  ....
+
+   The first element of each keymap is the key-symbol of X11.
+   you can get the key-symbol for your computer keyboard by xev:
+
+   2a. Start xev on a terminal.
+
+	% xev
+
+       You'll get a small window.
+
+   2b. Move the cursor pointer into the window.
+       Many X11 events will be displayed in realtime on the terminal.
+       Depending on the window manager, you'll need to click the
+       window to choose focus.
+
+   2c. Push the key you want to use.
+       The key-push/release event will be shown on the terminal like below.
+
+	KeyRelease event, serial 26, synthetic NO, window 0x1600001,
+	    root 0x3f, subw 0x0, time 4352873, (88,98), root:(1185,149),
+	    state 0x0, keycode 49 (keysym 0xff1b, Escape), same_screen YES,
+	    XLookupString gives 1 bytes:  "
+
+       Then you know the key-symbol is "Escape" (see keysym entry).
+
+   The second element of each keymap is the MIDI note offset from the
+   base note.  If the key is set to 48 on the vkeybd and if you have a
+   keymap entry like {Escape 15}, the key 63 (15+48) will be played
+   when you push Escape key.
+
+3. Restart vkeybd.
 
 
 PRESET LIST FILE
@@ -193,7 +245,6 @@ utility included in this package.  For example,
 	% sftovkb /usr/local/lib/sfbank/synthgm.sbk > vkeybd.list
 The only command line argument is the soundfont file name.  This must
 be a full path name.
-
 
 COPYRIGHT
 ---------

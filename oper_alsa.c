@@ -31,6 +31,7 @@
 
 #if SND_LIB_MINOR >= 6
 #define snd_seq_flush_output(x) snd_seq_drain_output(x)
+#define snd_seq_set_client_group(x,name) /*nop*/
 #endif
 
 /*
@@ -47,6 +48,8 @@ static void chorus_mode(Tcl_Interp *ip, void *private, int mode);
 static void reverb_mode(Tcl_Interp *ip, void *private, int mode);
 static void send_event(int do_flush);
 
+
+#define DEFAULT_NAME	"Virtual Keyboard"
 
 /*
  * definition of device information
@@ -66,6 +69,7 @@ static vkb_oper_t alsa_oper = {
 
 static vkb_optarg_t alsa_opts[] = {
 	{"addr", "subscriber", "--addr client:port or 'subscriber' : ALSA sequencer destination"},
+	{"name", DEFAULT_NAME, "--name string : use the specified string as client/port names"},
 	{NULL},
 };
 
@@ -118,7 +122,7 @@ static int parse_addr(char *arg, int *client, int *port)
 static int
 seq_open(Tcl_Interp *ip, void **private_return)
 {
-	char *var;
+	char *var, *name;
 	unsigned int caps;
 
 	/* copy from Tcl variables */
@@ -138,14 +142,21 @@ seq_open(Tcl_Interp *ip, void **private_return)
 	my_client = snd_seq_client_id(seq_handle);
 
 	/* set client info */
-	snd_seq_set_client_name(seq_handle, "Virtual Keyboard");
+	if ((var = Tcl_GetVar2(ip, "optvar", "name", TCL_GLOBAL_ONLY)) != NULL)
+		snd_seq_set_client_name(seq_handle, var);
+	else
+		snd_seq_set_client_name(seq_handle, DEFAULT_NAME);
 	snd_seq_set_client_group(seq_handle, "input");
 
 	/* create port */
 	caps = SND_SEQ_PORT_CAP_READ;
 	if (seq_client == SND_SEQ_ADDRESS_SUBSCRIBERS)
 		caps |= SND_SEQ_PORT_CAP_SUBS_READ;
-	my_port = snd_seq_create_simple_port(seq_handle, "Keyboard", caps,
+	if ((var = Tcl_GetVar2(ip, "optvar", "name", TCL_GLOBAL_ONLY)) != NULL)
+		name = var;
+	else
+		name = DEFAULT_NAME;
+	my_port = snd_seq_create_simple_port(seq_handle, name, caps,
 					     SND_SEQ_PORT_TYPE_APPLICATION);
 	if (my_port < 0) {
 		vkb_error(ip, "can't create port\n");

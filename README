@@ -1,5 +1,5 @@
 ====================================================================
-		VIRTUAL KEYBOARD ver.0.1.14
+		VIRTUAL KEYBOARD ver.0.1.16
 		Takashi Iwai  <tiwai@suse.de>
 ====================================================================
 
@@ -248,6 +248,13 @@ utility included in this package.  For example,
 	% sftovkb /usr/local/lib/sfbank/synthgm.sbk > vkeybd.list
 The only command line argument is the soundfont file name.  This must
 be a full path name.
+
+
+ACKNOWLEDGMENT
+--------------
+
+The desktop pixmaps are by courtesy of Ivo Clarysse.
+
 
 COPYRIGHT
 ---------

@@ -3,7 +3,7 @@
 # copyright (c) 1997-2000 by Takashi Iwai
 #
 
-VERSION = 0.1.15
+VERSION = 0.1.16
 
 #
 # installation directory
@@ -15,10 +15,13 @@ BIN_DIR = $(PREFIX)/bin
 MAN_SUFFIX = 1
 MAN_DIR = $(PREFIX)/share/man
 
+# data directory (/usr/share)
+DATA_DIR = $(PREFIX)/share
+
 #
 # preset and keyboard file are put here
 #
-VKBLIB_DIR = $(PREFIX)/share/vkeybd
+DATA_DIR = $(DATA_DIR)/vkeybd
 
 #
 # device selections -- multiple avaialble
@@ -109,7 +112,13 @@ install-man:
 	mkdir -p $(DESTDIR)$(MAN_DIR)/man$(MAN_SUFFIX)
 	install -c -m 444 vkeybd.man $(DESTDIR)$(MAN_DIR)/man$(MAN_SUFFIX)/vkeybd.$(MAN_SUFFIX)
 
-install-all: install install-man
+install-desktop:
+	mkdir -p $(DESTDIR)$(DATA_DIR)/applications
+	install -c vkeybd.desktop $(DESTDIR)$(DATA_DIR)/applications
+	mkdir -p $(DESTDIR)$(DATA_DIR)/pixmaps
+	install -c pixmaps/*.png $(DESTDIR)$(DATA_DIR)/pixmaps
+
+install-all: install install-man install-desktop
 
 clean:
 	rm -f *.o $(TARGETS)

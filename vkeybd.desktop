@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=vkeybd
+Comment=A virtual MIDI keyboard
+Exec=vkeybd
+Icon=vkeybd

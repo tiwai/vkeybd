@@ -1,0 +1,20 @@
+2003-08-19	ver.0.1.14
+	* added the support of standard "--x=y" style options.
+	* send program change immediately in ALSA mode.
+	* added --laddca option.  set "no" as default.
+	
+2003-07-03	ver.0.1.13a
+	* fixed for new LADCCA API
+	* removed debug messages
+	
+2003-01-23	ver.0.1.13
+	* fixed compile warnings (with the recent tcl/tk)
+	* LADCCA support
+	* README clean up
+	
+2002-07-25	ver.0.1.12
+	* don't override default key-bindings if defined
+	* fixed for the newer tcl/tk
+	
+2002-02-22	ver.0.1.11a
+	* fixed mouse motion on black keys

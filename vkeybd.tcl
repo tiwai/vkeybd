@@ -46,8 +46,9 @@ proc KeybdCreate {w} {
     set keywin $w
 
     canvas $w -width [expr $keywid * $optvar(octave) * 7]  -height $keyhgt -bd 1 -bg black
+    set numkeys [expr $optvar(octave) * 12]
     pack $w -side top
-    for {set i 0} {$i < 36} {incr i} {
+    for {set i 0} {$i < $numkeys} {incr i} {
 	set octave [expr ($i / 12) * 7]
 	set j [expr $i % 12]
 	if {$j >= 5} {incr j}
@@ -387,7 +388,7 @@ proc ToggleSeqOn {w} {
 proc MenuCreate {{pw ""}} {
     global env optvar defconfig
 
-    if [ $optvar(octave) < 1 || $optvar(octave) > 9 ] {
+    if {$optvar(octave) < 1 || $optvar(octave) > 9} {
 	puts stderr "vkeybd: invalid octave too value $optvar(octave)"
         set optvar(octave) 3
     }
@@ -461,7 +462,7 @@ proc MenuCreate {{pw ""}} {
 # create the virtual keyboard panel
 
 proc PanelCreate {{pw ""}} {
-    global controls curctrl ctrlval
+    global controls curctrl ctrlval optvar
 
     set w $pw.ctrl
     frame $w

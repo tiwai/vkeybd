@@ -42,6 +42,10 @@ Valid only for MIDI and ALSA devices. Default is 0.
 .B \--drum num
 Specify the channel to be played for drum instruments.
 Valid only for MIDI and ALSA devices. Default is 9.
+.TP
+.B \--octave num
+Specify the number of octaves to display keys.
+Default is 3.
 
 .SS "ALSA Device Option"
 .TP
@@ -58,6 +62,11 @@ a form like client:port or client.port, where client and port are index
 numbers listed in
 .B /proc/asound/seq/clients.
 Default is 's'.
+.TP
+.B \--name string
+Specify the name of client/port.  Some applications like tk707
+check the client/port name whether it is a valid MIDI device port.
+This options makes vkeybd possible to "fake" as a real MIDI device.
 
 .SS "OSS Sequencer Device Options"
 .TP

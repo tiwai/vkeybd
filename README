@@ -85,6 +85,9 @@ Common Options:
   --drum num
 	Specify the channel to be played for drum instruments.
 	Valid only for MIDI and ALSA devices. Default is 9.
+  --octave num
+	Specify the number of octaves to display keys.
+	Default is 3.
 
 ALSA Device Option:
   --addr client:port or 's'
@@ -93,6 +96,11 @@ ALSA Device Option:
 	port, and events are sent to all subscribers.  Otherwise,
 	vkeybd connects directly to the specified port.
 	Default is 's'.
+  --name string
+	Specify the name of client/port.  Some applications like
+	tk707 check the client/port name whether it is a valid MIDI
+	device port.  This options makes vkeybd possible to "fake"
+	as a real MIDI device.
 
 OSS Sequencer Device Option:
   --seqdev file

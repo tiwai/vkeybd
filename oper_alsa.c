@@ -133,7 +133,8 @@ seq_open(Tcl_Interp *ip, void **private_return)
 		}
 	}
 	
-	if (snd_seq_open(&seq_handle, SND_SEQ_OPEN_OUT) < 0) {
+	if (snd_seq_open(&seq_handle, SND_SEQ_OPEN /*SND_SEQ_OPEN_OUT*/) < 0) {
+		/* SND_SEQ_OPEN_OUT causes oops on early version of ALSA */
 		vkb_error(ip, "can't open sequencer device");
 		return 0;
 	}
@@ -175,7 +176,7 @@ seq_open(Tcl_Interp *ip, void **private_return)
 
 	{
 		char tmp[128];
-		sprintf(tmp, "wm title . \"Virtual Keyboard ver.1.7 \\[%d:%d\\]\"", my_client, my_port);
+		sprintf(tmp, "wm title . \"Virtual Keyboard ver.1.9 \\[%d:%d\\]\"", my_client, my_port);
 		Tcl_Eval(ip, tmp);
 	}
 

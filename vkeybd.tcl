@@ -22,6 +22,11 @@ set keywid 18
 set keyhgt 72
 
 #----------------------------------------------------------------
+# keyboard octaves
+
+set optvar(octave) 3
+
+#----------------------------------------------------------------
 # keyboard map {key-symbol midi-number}
 
 set keymap {
@@ -36,10 +41,11 @@ set keymap {
 
 proc KeybdCreate {w} {
     global keycolor keywid keyitem keyindex keyhgt keymap keywin
+    global optvar
 
     set keywin $w
 
-    canvas $w -width [expr $keywid * 21]  -height $keyhgt -bd 1 -bg black
+    canvas $w -width [expr $keywid * $optvar(octave) * 7]  -height $keyhgt -bd 1 -bg black
     pack $w -side top
     for {set i 0} {$i < 36} {incr i} {
 	set octave [expr ($i / 12) * 7]
@@ -381,6 +387,11 @@ proc ToggleSeqOn {w} {
 proc MenuCreate {{pw ""}} {
     global env optvar defconfig
 
+    if [ $optvar(octave) < 1 || $optvar(octave) > 9 ] {
+	puts stderr "vkeybd: invalid octave too value $optvar(octave)"
+        set optvar(octave) 3
+    }
+       
     set w $pw.menubar
     menu $w -tearoff 0
 
@@ -490,7 +501,7 @@ proc PanelCreate {{pw ""}} {
     frame $w.k
     label $w.k.label -text "Key"
     scale $w.k.val -orient horizontal\
-	    -from 0 -to 84 -resolution 12\
+	    -from 0 -to [expr 120 - ($optvar(octave) * 12)] -resolution 12\
 	    -showvalue true -variable keybase
     pack $w.k.label $w.k.val -side left -expand 1
 

@@ -31,6 +31,7 @@
 
 #define DEF_INST_CHAN_NO	"0"
 #define DEF_DRUM_CHAN_NO	"9"
+#define DEF_OCTAVES		"3"
 
 /*
  * prototypes
@@ -107,6 +108,7 @@ usage(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 	fprintf(stderr, "  --preset file  : use preset list file\n");
 	fprintf(stderr, "  --channel number : specify instrument channel (0-15) (default = %s)\n", DEF_INST_CHAN_NO);
 	fprintf(stderr, "  --drum number : specify drum channel (0-15) (default = %s)\n", DEF_DRUM_CHAN_NO);
+	fprintf(stderr, "  --octave number : specify octaves of displaying keys (default = %s)\n", DEF_OCTAVES);
 	fprintf(stderr, "* output devices:\n");
 
 	for (i = 0; i < vkb_num_devices; i++) {
@@ -351,6 +353,7 @@ vkb_app_init(Tcl_Interp *interp)
 	Tcl_SetVar2(interp, "optvar", "libpath", VKBLIB_DIR, TCL_GLOBAL_ONLY);
 	Tcl_SetVar2(interp, "optvar", "channel", DEF_INST_CHAN_NO, TCL_GLOBAL_ONLY);
 	Tcl_SetVar2(interp, "optvar", "drum", DEF_DRUM_CHAN_NO, TCL_GLOBAL_ONLY);
+	Tcl_SetVar2(interp, "optvar", "octave", DEF_OCTAVES, TCL_GLOBAL_ONLY);
 
 	return TCL_OK;
 }

@@ -161,6 +161,7 @@ seq_open(Tcl_Interp *ip, void **private_return)
 	else
 		name = DEFAULT_NAME;
 	my_port = snd_seq_create_simple_port(seq_handle, name, caps,
+					     SND_SEQ_PORT_TYPE_MIDI_GENERIC |
 					     SND_SEQ_PORT_TYPE_APPLICATION);
 	if (my_port < 0) {
 		vkb_error(ip, "can't create port\n");

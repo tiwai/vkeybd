@@ -1,5 +1,5 @@
 ====================================================================
-		VIRTUAL KEYBOARD ver.0.1.16
+		VIRTUAL KEYBOARD ver.0.1.17
 		Takashi Iwai  <tiwai@suse.de>
 ====================================================================
 
@@ -173,7 +173,7 @@ one note is generated.  Thus you no longer have to turn off auto
 repeat via "xset -r".
 
 The key assignment can be changed by editting the config file
-~/.vkeybdrc.  Once save the current configuration via File/Save Config
+~/.vkeybdmap.  Once save the current configuration via File/Save Keymap
 menu.  The config file is the Tcl source, and you may change the list
 of keymap as you wish.
 
@@ -188,8 +188,8 @@ CHANGING THE KEYMAP
 
 The step for changing the keymap manually is like this.
 
-1. Save the current configuration by "File / Save Config" menu.
-   You'll have ~/.vkeybdrc file.
+1. Save the current configuration by "File / Save Keymap" menu.
+   You'll have ~/.vkeybdmap file.
 
 2. Edit it using your favorite text editor.
    There is a list of keymap definitions such as

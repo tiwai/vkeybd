@@ -14,6 +14,7 @@
 # preset list file
 set defpresetfile vkeybd.list
 set defconfig vkeybdrc
+set defkeymap vkeybdmap
 
 #----------------------------------------------------------------
 # keyboard size (width & height)
@@ -27,16 +28,6 @@ set keyhgt 72
 set optvar(octave) 3
 
 #----------------------------------------------------------------
-# keyboard map {key-symbol midi-number}
-
-set keymap {
-    {a 8} {z 9} {s 10} {x 11}
-    {c 12} {f 13} {v 14} {g 15} {b 16} {n 17} {j 18} {m 19} {k 20}
-    {comma 21} {l 22} {period 23}
-    {slash 24} {apostrophe 25} {backslash 26} {grave 27}
-}
-
-#----------------------------------------------------------------
 # create virtual keyboard
 
 proc CheckKeymap {target} {
@@ -48,6 +39,20 @@ proc CheckKeymap {target} {
 	}
     }
     return 1
+}
+
+proc IncKeyBase {} {
+    global keybase optvar
+    if {$keybase < [expr 120 - ($optvar(octave) * 12)]} {
+	set keybase [expr $keybase + 12]
+    }
+}
+
+proc DecKeyBase {} {
+    global keybase optvar
+    if {$keybase >= 12} {
+	set keybase [expr $keybase - 12]
+    }
 }
 
 proc KeybdCreate {w} {
@@ -101,10 +106,12 @@ proc KeybdCreate {w} {
     if [CheckKeymap Escape] {
 	bind $w <Key-Escape> {SeqOff; ResetControls}
     }
-    if [CheckKeymap q] {
-	bind $w <Key-q> {exit 0}
-    }
     bind $w <Control-c> {exit 0}
+    bind $w <Control-q> {exit 0}
+    bind $w <Key-Up> {IncKeyBase}
+    bind $w <Key-Right> {IncKeyBase}
+    bind $w <Key-Down> {DecKeyBase}
+    bind $w <Key-Left> {DecKeyBase}
     focus $w
 }
 
@@ -446,7 +453,7 @@ proc ToggleSeqOn {w} {
 
 # create the pulldown menues
 proc MenuCreate {{pw ""}} {
-    global env optvar defconfig
+    global env optvar defconfig defkeymap
 
     if {$optvar(octave) < 1 || $optvar(octave) > 9} {
 	puts stderr "vkeybd: invalid octave too value $optvar(octave)"
@@ -462,6 +469,7 @@ proc MenuCreate {{pw ""}} {
 	    -command "ToggleSeqOn $w.file.off"\
 	    -variable seqswitch -underline 0
     $w.file add command -label "Save Config" -command "SaveConfig $env(HOME)/.$defconfig" -underline 0
+    $w.file add command -label "Save Keymap" -command "SaveKeymap $env(HOME)/.$defkeymap" -underline 0
     $w.file add command -label "Quit" -command {exit 0} -underline 0
 
     $w add cascade -menu $w.view -label "View" -underline 0
@@ -683,17 +691,32 @@ proc LoadConfig {fname} {
 # save config file
 #
 proc SaveConfig {fname} {
-    global disp keymap
+    global disp optvar keymap
     set file [open $fname w]
     if {$file == ""} {
 	tk_messageBox -icon error -message "can't open file $fname." -type ok
 	return
     }
-    puts $file "global disp keymap"
+    puts $file "global disp optvar"
     puts $file "set disp(keyvel) $disp(keyvel)"
     puts $file "set disp(ctrl) $disp(ctrl)"
     puts $file "set disp(pitch) $disp(pitch)"
     puts $file "set disp(prog) $disp(prog)"
+    puts $file "set optvar(octave) $optvar(octave)"
+    close $file
+}
+
+#
+# Save Keymap config file (read by LoadConfig)
+#
+proc SaveKeymap {fname} {
+    global keymap
+    set file [open $fname w]
+    if {$file == ""} {
+	tk_messageBox -icon error -message "can't open file $fname." -type ok
+	return
+    }
+    puts $file "global keymap"
     puts $file "set keymap {"
     foreach i $keymap {
 	set key [lindex $i 0]
@@ -705,7 +728,7 @@ proc SaveConfig {fname} {
 }
 
 #
-# read keymap file
+# read a non-tcl style keymap file
 #
 proc ReadKeymap {fname} {
     global keymap
@@ -736,17 +759,22 @@ if {! [info exists optvar(libpath)]} {
 
 set optvar(preset) [SearchDefault $defpresetfile]
 set optvar(config) [SearchDefault $defconfig]
+set optvar(keymap) [SearchDefault $defkeymap]
 set optvar(channel) 0
 
 ParseOptions $argc $argv
 
 LoadConfig $optvar(config)
+LoadConfig $optvar(keymap)
+
+# parse again to override optvar's in the config file
+ParseOptions $argc $argv
 
 InitPreset
 MenuCreate
 PanelCreate
 
-wm title . "Virtual Keyboard ver.0.1.10"
+wm title . "Virtual Keyboard ver.0.1.17"
 wm iconname . "Virtual Keyboard"
 
 SeqOn preinit

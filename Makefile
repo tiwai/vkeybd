@@ -99,7 +99,7 @@ vkeybd: vkb.o vkb_device.o $(DEVOBJS) $(EXTRAOBJS)
 sftovkb: sftovkb.o sffile.o malloc.o fskip.o
 	$(CC) -o $@ $^ -lm
 
-install: $(TARGETS) vkeybd.tcl vkeybd.list
+install: $(TARGETS) vkeybd.tcl vkeybd.list vkeybdmap*
 	mkdir -p $(DESTDIR)$(BIN_DIR)
 	install -c -s vkeybd $(DESTDIR)$(BIN_DIR)
 	install -c -s sftovkb $(DESTDIR)$(BIN_DIR)
@@ -107,6 +107,7 @@ install: $(TARGETS) vkeybd.tcl vkeybd.list
 	mkdir -p $(DESTDIR)$(VKBLIB_DIR)
 	install -c -m 444 vkeybd.tcl $(DESTDIR)$(VKBLIB_DIR)
 	install -c -m 444 vkeybd.list $(DESTDIR)$(VKBLIB_DIR)
+	install -c -m 444 vkeybdmap* $(DESTDIR)$(VKBLIB_DIR)
 
 install-man:
 	mkdir -p $(DESTDIR)$(MAN_DIR)/man$(MAN_SUFFIX)

@@ -65,7 +65,7 @@ static int seq_bend = 0;
 static vkb_oper_t *oper;
 
 #ifdef HAVE_LADCCA	
-cca_client_t * cca_client = NULL;
+cca_args_t * cca_args = NULL;
 #endif
  
 /*
@@ -78,9 +78,7 @@ int main(int argc, char **argv)
 	int c, nargc;
 
 #ifdef HAVE_LADCCA	
-	cca_client = cca_init (cca_extract_args (&argc, &argv),
-	                       "vkeybd",
-	                       CCA_Use_Alsa, CCA_PROTOCOL_VERSION);
+	cca_args = cca_extract_args(&argc, &argv);
 #endif /* HAVE_LADCCA */
 
 	nargc = argc + 1;

@@ -73,7 +73,7 @@ void vkb_error(Tcl_Interp *ip, char *fmt, ...);
 int vkb_get_int(Tcl_Interp *ip, char *opt, int *ret);
 
 #ifdef HAVE_LADCCA
-extern cca_client_t * cca_client;
+extern cca_args_t *cca_args;
 #endif
 
 #endif

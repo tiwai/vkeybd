@@ -648,12 +648,24 @@ proc ParseOptions {argc argv} {
 	set arg [lindex $argv $i]
 	if {! [string match -* $arg]} {break}
 	set arg [string range $arg 2 end]
-	if {[info exists optvar($arg)]} {
-	    incr i
-	    set optvar($arg) [lindex $argv $i]
+	if {[string match *=* $arg]} {
+	    set idx [string first = $arg]
+	    set val [string range $arg [expr $idx + 1] end]
+	    set arg [string range $arg 0 [expr $idx - 1]]
+	    if {[info exists optvar($arg)]} {
+		set optvar($arg) $val
+	    } else {
+		usage
+		exit 1
+	    }
 	} else {
-	    usage
-	    exit 1
+	    if {[info exists optvar($arg)]} {
+		incr i
+		set optvar($arg) [lindex $argv $i]
+	    } else {
+		usage
+		exit 1
+	    }
 	}
     }
 }

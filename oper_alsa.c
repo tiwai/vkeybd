@@ -78,6 +78,9 @@ static vkb_oper_t alsa_oper = {
 static vkb_optarg_t alsa_opts[] = {
 	{"addr", "subscriber", "--addr client:port or 'subscriber' : ALSA sequencer destination"},
 	{"name", DEFAULT_NAME, "--name string : use the specified string as client/port names"},
+#ifdef HAVE_LADCCA	
+	{"ladcca", "no", "--ladcca <yes|no> : support LADCCA (default = no)"},
+#endif
 	{NULL},
 };
 
@@ -96,6 +99,10 @@ static snd_seq_t *seq_handle = NULL;
 static int my_client, my_port;
 static int seq_client, seq_port;
 static int chan_no;
+
+#ifdef HAVE_LADCCA	
+static cca_client_t * cca_client = NULL;
+#endif
 
 /*
  * parse address string
@@ -151,15 +158,22 @@ seq_open(Tcl_Interp *ip, void **private_return)
 	
 	/* tell the ladcca server our client id */
 #ifdef HAVE_LADCCA
-	if (cca_enabled (cca_client)) {
-		cca_event_t * event;
-		unsigned char id[2];
-		event = cca_event_new_with_type (CCA_Alsa_Client_ID);
-		id[0] = snd_seq_client_id (seq_handle);
-		id[1] = '\0';
-		cca_event_set_string (event, id);
-		cca_send_event (cca_client, event);
- 	}
+	if ((var = Tcl_GetVar2(ip, "optvar", "ladcca", TCL_GLOBAL_ONLY)) != NULL) {
+		if (*var == 'y' || *var == 'Y' || *var == '1') {
+			cca_client = cca_init (cca_args,
+					       "vkeybd",
+					       CCA_Use_Alsa, CCA_PROTOCOL_VERSION);
+			if (cca_enabled (cca_client)) {
+				cca_event_t * event;
+				unsigned char id[2];
+				event = cca_event_new_with_type (CCA_Alsa_Client_ID);
+				id[0] = snd_seq_client_id (seq_handle);
+				id[1] = '\0';
+				cca_event_set_string (event, id);
+				cca_send_event (cca_client, event);
+			}
+		}
+	}
 #endif /* HAVE_LADCCA */
  
 	/* set client info */
@@ -266,7 +280,7 @@ program(Tcl_Interp *ip, void *private, int bank, int preset)
 	}
 
 	snd_seq_ev_set_pgmchange(&ev, chan_no, preset);
-	send_event(0);
+	send_event(1);
 }
 
 static void

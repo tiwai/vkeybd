@@ -1,5 +1,5 @@
 ====================================================================
-		VIRTUAL KEYBOARD ver.0.1.13
+		VIRTUAL KEYBOARD ver.0.1.14
 		Takashi Iwai  <tiwai@suse.de>
 ====================================================================
 
@@ -105,6 +105,9 @@ ALSA Device Option:
 	tk707 check the client/port name whether it is a valid MIDI
 	device port.  This options makes vkeybd possible to "fake"
 	as a real MIDI device.
+  --ladcca bool
+	Specify the support of LADCCA.  Give yes or no as the
+	argument.  The default value is no.
 
 OSS Sequencer Device Option:
   --seqdev file

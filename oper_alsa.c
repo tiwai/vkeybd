@@ -29,17 +29,22 @@
 #include <fcntl.h>
 #include <sys/asoundlib.h>
 
+#if SND_LIB_MINOR >= 6
+#define snd_seq_flush_output(x) snd_seq_drain_output(x)
+#endif
 
 /*
  * functions
  */
 static int seq_open(Tcl_Interp *ip, void **private_return);
-static void seq_close(void *private);
-static void note_on(void *private, int note, int vel);
-static void note_off(void *private, int note, int vel);
-static void control(void *private, int type, int val);
-static void program(void *private, int bank, int type);
-static void bender(void *private, int bend);
+static void seq_close(Tcl_Interp *ip, void *private);
+static void note_on(Tcl_Interp *ip, void *private, int note, int vel);
+static void note_off(Tcl_Interp *ip, void *private, int note, int vel);
+static void control(Tcl_Interp *ip, void *private, int type, int val);
+static void program(Tcl_Interp *ip, void *private, int bank, int type);
+static void bender(Tcl_Interp *ip, void *private, int bend);
+static void chorus_mode(Tcl_Interp *ip, void *private, int mode);
+static void reverb_mode(Tcl_Interp *ip, void *private, int mode);
 static void send_event(int do_flush);
 
 
@@ -55,8 +60,8 @@ static vkb_oper_t alsa_oper = {
 	note_off,
 	control,
 	bender,
-	NULL, /* chorus_mode */
-	NULL, /* reverb_mode */
+	chorus_mode,
+	reverb_mode,
 };
 
 static vkb_optarg_t alsa_opts[] = {
@@ -78,7 +83,7 @@ vkb_devinfo_t alsa_devinfo = {
 static snd_seq_t *seq_handle = NULL;
 static int my_client, my_port;
 static int seq_client, seq_port;
-static int inst_chan_no, drum_chan_no, chan_no;
+static int chan_no;
 
 /*
  * parse address string
@@ -124,7 +129,7 @@ seq_open(Tcl_Interp *ip, void **private_return)
 		}
 	}
 	
-	if (snd_seq_open(&seq_handle, SND_SEQ_OPEN) < 0) {
+	if (snd_seq_open(&seq_handle, SND_SEQ_OPEN_OUT) < 0) {
 		vkb_error(ip, "can't open sequencer device");
 		return 0;
 	}
@@ -157,12 +162,6 @@ seq_open(Tcl_Interp *ip, void **private_return)
 		}
 	}
 
-	if ((var = Tcl_GetVar2(ip, "optvar", "channel", TCL_GLOBAL_ONLY)) != NULL)
-		inst_chan_no = atoi(var);
-	if ((var = Tcl_GetVar2(ip, "optvar", "drum", TCL_GLOBAL_ONLY)) != NULL)
-		drum_chan_no = atoi(var);
-	chan_no = inst_chan_no;
-
 	{
 		char tmp[128];
 		sprintf(tmp, "wm title . \"Virtual Keyboard ver.1.7 \\[%d:%d\\]\"", my_client, my_port);
@@ -174,7 +173,7 @@ seq_open(Tcl_Interp *ip, void **private_return)
 
 
 static void
-seq_close(void *private)
+seq_close(Tcl_Interp *ip, void *private)
 {
 	snd_seq_close(seq_handle);
 }
@@ -198,33 +197,33 @@ send_event(int do_flush)
 }
 
 static void
-note_on(void *private, int note, int vel)
+note_on(Tcl_Interp *ip, void *private, int note, int vel)
 {
 	snd_seq_ev_set_noteon(&ev, chan_no, note, vel);
 	send_event(1);
 }
 
 static void
-note_off(void *private, int note, int vel)
+note_off(Tcl_Interp *ip, void *private, int note, int vel)
 {
 	snd_seq_ev_set_noteoff(&ev, chan_no, note, vel);
 	send_event(1);
 }
 
 static void
-control(void *private, int type, int val)
+control(Tcl_Interp *ip, void *private, int type, int val)
 {
 	snd_seq_ev_set_controller(&ev, chan_no, type, val);
 	send_event(1);
 }
 
 static void
-program(void *private, int bank, int preset)
+program(Tcl_Interp *ip, void *private, int bank, int preset)
 {
+	vkb_get_int(ip, "channel", &chan_no);
 	if (bank == 128)
-		chan_no = drum_chan_no;
+		vkb_get_int(ip, "drum", &chan_no);
 	else {
-		chan_no = inst_chan_no;
 		snd_seq_ev_set_controller(&ev, 0, 0, bank);
 		send_event(0);
 	}
@@ -234,8 +233,33 @@ program(void *private, int bank, int preset)
 }
 
 static void
-bender(void *private, int bend)
+bender(Tcl_Interp *ip, void *private, int bend)
 {
 	snd_seq_ev_set_pitchbend(&ev, chan_no, bend);
 	send_event(1);
 }
+
+static void
+chorus_mode(Tcl_Interp *ip, void *private, int mode)
+{
+	static unsigned char sysex[11] = {
+		0xf0, 0x41, 0x10, 0x42, 0x12, 0x40, 0x01, 0x38, 0, 0, 0xf7,
+	};
+	sysex[8] = mode;
+	snd_seq_ev_set_sysex(&ev, 11, sysex);
+	send_event(1);
+	snd_seq_ev_set_fixed(&ev); /* reset */
+}
+
+static void
+reverb_mode(Tcl_Interp *ip, void *private, int mode)
+{
+	static unsigned char sysex[11] = {
+		0xf0, 0x41, 0x10, 0x42, 0x12, 0x40, 0x01, 0x30, 0, 0, 0xf7,
+	};
+	sysex[8] = mode;
+	snd_seq_ev_set_sysex(&ev, 11, sysex);
+	send_event(1);
+	snd_seq_ev_set_fixed(&ev); /* reset */
+}
+

@@ -1,5 +1,5 @@
 ====================================================================
-		VIRTUAL KEYBOARD ver.0.1.7
+		VIRTUAL KEYBOARD ver.0.1.8
 	Takashi Iwai  <tiwai@suse.de>
 ====================================================================
 
@@ -75,8 +75,8 @@ Common Options:
 	The argument are "awe", "midi" or "alsa", for AWE/OSS,
 	MIDI/OSS and ALSA devices, respectively.
 	Default is alsa.
-  --keymap file
-	Use the specified file as keymap file (see below)
+  --config file
+	Use the specified file as config file (see below)
   --preset file
 	Use the specified file as preset list file (see below)
   --channel num
@@ -109,58 +109,64 @@ MIDI Device Option:
 	Default value is /dev/midi.
 
 
-BUTTONS
--------
+FILE MENU
+---------
 
-The lowest value of visible three octave note keys is shown in the
-"KEY" scale bar (as default 48, C4).  You can play a tone by clicking
-the mouse button on the virtual keyboard.
+"Connection" shows whether the vkeybd connects to the device.
+On OSS system, only one application is allowed to access sequencer
+device.  Thus, if one wants to play another program even using another
+device, he needs to disconnect vkeybd once.  On ALSA or OSS emulation
+on ALSA, you don't have to switch vkeybd off, since multiple access is
+allowed.
+
+With "Save Config", the current keymap and view configuration are
+saved on ~/.vkeybdrc config file.  This file will be read at the next
+invoke.
+
+VIEW MENU
+---------
+
+Thie menu shows the check buttons to toggle the display of control
+buttons.
+
+With "Key/Velocity" button, a key and a velocity scale bars are
+shown.  The key scale indicates the lowest note value of the visible
+keyboard (as default 48 = C4).  The velocity scale bar is used to
+change the velocity of each note-on.
+
+With "Control" button, controls for the current channel and for the
+MIDI continous-controls are enabled.  The channel number is increased
+or decreased by clicking the right or left button around the shown
+channel number.  The bank and preset are remembered for each channel.
+You may choose the CC to be adjusted by pull-down menu, which
+indicates "ModWheel" as default.  Then change the parameter value with 
+the scale bar at the right side.
+
+With "Pitch" button, you may adjust pitch wheel.  The pitch goes
+back to the center position when you click the "Pitch Clear" button
+at the left.
+
+With "Program" button, the selection list of playing instrument is
+toggled.  The shown presets are read from preset list file.
+
+KEYBOARD
+--------
 
 Each visible key is mapped on your computer keyboard from 'z' to '\'.
 To use the computer keyboard, you should turn off auto repeat on your
 X display via "xset -r".
 
-The "Power" button is used to release the sequencer device from
-virtual keyboard.  On OSS system, only one application is allowed to
-access sequencer device.  Thus, if one wants to play another program
-even using another device, he needs to disconnect vkeybd once.
-On ALSA or OSS emulation on ALSA, you don't have to switch vkeybd off,
-since multiple access is allowed.
+The key assignment can be changed by editting the config file
+~/.vkeybdrc.  Once save the current configuration via File/Save Config
+menu.  The config file is the Tcl source, and you may change the list
+of keymap as you wish.
 
-The "VEL" scale bar is used to change the velocity of the sound.
-
-The right button from "Power" is a controller selection button.
-When this button is pressed, a pull-down menu appears, and you can
-select the control event to be changed by the scale bar in the right
-side of this button.  The "reset" item is used to reset all the
-controller values to the default ones.
-
-The "Chorus" and "Reverb" buttons are menu buttons to choose the
-arbitrary chorus and reverb modes, respectively.  It is valid only on
-AWE device mode.
-
-The scale bar in the right side of these buttons represents a virtual
-pitch wheel.  "ClrPitch" button is used to reset the wheel position to
-normal.
-
-The "Program" button is used to enable/disable selection of playing
-instrument.  The shown presets are read from preset list file.
-
-
-KEY ASSIGNMENT
---------------
-
-The key assignment can be changed by a keymap file.  Each line of keymap
-file consists of key symbol and midi note number offset separated by
-space.  The key symbol is the X key symbol for assigned key, and note
-offset is the shifted note number from note key of beginning of
-keyboard, which is changed by "KEY" scalebar.  For example, if a line
-contains "a 8" and the lowest note is 48, then MIDI note 56 will be
-played by pressing the computer key "a".  The following files are
-searched as keymap file: ~/vkeybd.key, ~/.vkeybd.key and
-$vkblib/vkeybd.key.  The default path of vkeybd data is
-/usr/local/share/vkeybd.  Otherwise, you need to specify it by command
-line option.
+The keymap is a list of elements consisting on the key symbol and the
+corresponding note offset.  The key symbol is the X key symbol for
+assigned key, and note offset is the shifted note number from note key
+of beginning of keyboard, which is changed by "Key" scalebar.
+For example, when a pair of {a 8} is defined and the lowest MIDI key
+is 48, a MIDI note 56 will be turned on by pressing the key 'a'.
 
 
 PRESET LIST FILE

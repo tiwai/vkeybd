@@ -13,8 +13,7 @@
 
 # preset list file
 set defpresetfile vkeybd.list
-# keymap file
-set defkeymapfile vkeybd.key
+set defconfig vkeybdrc
 
 #----------------------------------------------------------------
 # keyboard size (width & height)
@@ -31,7 +30,6 @@ set keymap {
     {comma 21} {l 22} {period 23}
     {slash 24} {apostrophe 25} {backslash 26} {grave 27}
 }
-
 
 #----------------------------------------------------------------
 # create virtual keyboard
@@ -159,6 +157,8 @@ proc ResetControls {{send_seq 0}} {
 	set ctrlval($type) [lindex $i 2]
 	if {$send_seq} {SeqControl $type $ctrlval($type)}
     }
+    # all sounds off
+    SeqControl 120 0
 }
 
 proc NewControl {w ctrl} {
@@ -179,8 +179,8 @@ proc MakeLists {w} {
     global sflist bankvar bankmode optvar
 
     set sflist {}
-    if {[file readable $optvar(presetfile)]} {
-	ReadSF $optvar(presetfile) sflist
+    if {[file readable $optvar(preset)]} {
+	ReadSF $optvar(preset) sflist
     }
 
     if {$sflist == {}} {
@@ -249,6 +249,40 @@ proc MakePresets {w} {
     }
 }
 
+# change the current channel
+
+proc InitPreset {} {
+    global chanbank chanpreset
+    for {set i 0} {$i < 16} {incr i} {
+	if {$i == 9} {
+	    set chanbank($i) 128
+	} else {
+	    set chanbank($i) 0
+	}
+	set chanpreset($i) 0
+    }
+}
+
+proc DecrChannel {} {
+    global optvar chanbank chanpreset
+    if {$optvar(channel) > 0} {
+	set optvar(channel) [expr $optvar(channel) - 1]
+	# all sounds off
+	SeqControl 120 0
+	SeqProgram $chanbank($optvar(channel)) $chanpreset($optvar(channel))
+    }
+}
+
+proc IncrChannel {} {
+    global optvar chanbank chanpreset
+    if {$optvar(channel) < 15} {
+	incr optvar(channel)
+	# all sounds off
+	SeqControl 120 0
+	SeqProgram $chanbank($optvar(channel)) $chanpreset($optvar(channel))
+    }
+}
+
 # remake preset list from selected bank listbox
 
 proc BankSelect {w coord} {
@@ -271,7 +305,7 @@ proc BankSelect {w coord} {
 # set the selected preset to sequencer
 
 proc ProgSelect {w coord} {
-    global sflist
+    global sflist chanpreset chanbank optvar
     set idx [$w.p.list nearest $coord]
     if {$idx == ""} {return}
     set sel [$w.p.list get $idx]
@@ -279,6 +313,8 @@ proc ProgSelect {w coord} {
     scan [lindex $lp 0] "%d" bank
     scan [lindex $lp 1] "%d" preset
     set name [join [string range $lp 8 end]]
+    set chanbank($optvar(channel)) $bank
+    set chanpreset($optvar(channel)) $preset
     SeqProgram $bank $preset
     $w.p.label configure -text "Preset:$name"
 }
@@ -313,13 +349,17 @@ proc my-listbox {w title width height {dohoriz 0}} {
 
 # toggle display of preset selection windows
 
-set dispprog 0
-proc ToggleDispProg {w} {
-    global dispprog
-    if {$dispprog} {
-	pack $w -side top -fill x
+set disp(keyvel) 0
+set disp(ctrl) 0
+set disp(pitch) 0
+set disp(prog) 0
+
+proc ToggleView {w cvar} {
+    global disp
+    if {$disp($cvar)} {
+	pack $w.$cvar -side top -fill x
     } else {
-	pack forget $w
+	pack forget $w.$cvar
     }
 }
 
@@ -337,118 +377,149 @@ proc ToggleSeqOn {w} {
 }
 
 
+# create the pulldown menues
+proc MenuCreate {{pw ""}} {
+    global env optvar defconfig
+
+    set w $pw.menubar
+    menu $w -tearoff 0
+
+    $w add cascade -menu $w.file -label "File" -underline 0
+    menu $w.file -tearoff 0
+    $w.file add checkbutton -label "Connection"\
+	    -command "ToggleSeqOn $w.file.off"\
+	    -variable seqswitch -underline 0
+    $w.file add command -label "Save Config" -command "SaveConfig $env(HOME)/.$defconfig" -underline 0
+    $w.file add command -label "Quit" -command {exit 0} -underline 0
+
+    $w add cascade -menu $w.view -label "View" -underline 0
+    menu $w.view -tearoff 0
+    $w.view add check -label "Key/Velocity" -variable disp(keyvel)\
+	    -command [list ToggleView $pw keyvel]
+    $w.view add check -label "Controls" -variable disp(ctrl)\
+	    -command [list ToggleView $pw ctrl]
+    $w.view add check -label "Pitchwheel" -variable disp(pitch)\
+	    -command [list ToggleView $pw pitch]
+    $w.view add check -label "Program List" -variable disp(prog)\
+	    -command [list ToggleView $pw prog]
+
+    $w add cascade -menu $w.reverb -label "Reverb" -underline 0
+    menu $w.reverb -tearoff 0
+    $w.reverb add radio -label "Room 1"\
+	    -variable reverbmode -value 0 -command "SeqReverbMode 0"
+    $w.reverb add radio -label "Room 2"\
+	    -variable reverbmode -value 1 -command "SeqReverbMode 1"
+    $w.reverb add radio -label "Room 3"\
+	    -variable reverbmode -value 2 -command "SeqReverbMode 2"
+    $w.reverb add radio -label "Hall 1"\
+	    -variable reverbmode -value 3 -command "SeqReverbMode 3"
+    $w.reverb add radio -label "Hall 2"\
+	    -variable reverbmode -value 4 -command "SeqReverbMode 4"
+    $w.reverb add radio -label "Plate"\
+	    -variable reverbmode -value 5 -command "SeqReverbMode 5"
+    $w.reverb add radio -label "Delay"\
+	    -variable reverbmode -value 6 -command "SeqReverbMode 6"
+    $w.reverb add radio -label "Panning Delay"\
+	    -variable reverbmode -value 7 -command "SeqReverbMode 7"
+
+    $w add cascade -menu $w.chorus -label "Chorus" -underline 0
+    menu $w.chorus -tearoff 0
+    $w.chorus add radio -label "Chorus 1"\
+	    -variable chorusmode -value 0 -command "SeqChorusMode 0"
+    $w.chorus add radio -label "Chorus 2"\
+	    -variable chorusmode -value 1 -command "SeqChorusMode 1"
+    $w.chorus add radio -label "Chorus 3"\
+	    -variable chorusmode -value 2 -command "SeqChorusMode 2"
+    $w.chorus add radio -label "Chorus 4"\
+	    -variable chorusmode -value 3 -command "SeqChorusMode 3"
+    $w.chorus add radio -label "Feedback"\
+	    -variable chorusmode -value 4 -command "SeqChorusMode 4"
+    $w.chorus add radio -label "Flanger"\
+	    -variable chorusmode -value 5 -command "SeqChorusMode 5"
+    $w.chorus add radio -label "Short Delay"\
+	    -variable chorusmode -value 6 -command "SeqChorusMode 6"
+    $w.chorus add radio -label "Short Delay 2"\
+	    -variable chorusmode -value 7 -command "SeqChorusMode 7"
+
+    global reverbmode chorusmode
+    set reverbmode 4
+    set chorusmode 2
+
+}    
+
 # create the virtual keyboard panel
 
 proc PanelCreate {{pw ""}} {
-    global controls curctrl ctrlval seqswitch dispprog
-    global chorusmode reverbmode pitchbend
+    global controls curctrl ctrlval
 
-    KeybdCreate $pw.kbd
+    set w $pw.ctrl
+    frame $w
 
-    #----------------------------------------------------------------
+    frame $w.chan
+    label $w.chan.label -text "Channel"
+    button $w.chan.left -text "<" -command { DecrChannel }
+    label $w.chan.digit -textvariable optvar(channel)
+    button $w.chan.right -text ">" -command { IncrChannel }
+    pack $w.chan.label $w.chan.left $w.chan.digit $w.chan.right -side left -expand 1
 
-    frame $pw.btn
-    set w $pw.btn
-
-    button $w.quit -text "Quit" -command {exit 0}
-    checkbutton $w.off -text "Power" -command "ToggleSeqOn $w.off"\
-	    -variable seqswitch
-    set seqswitch $w.off
-
-    menubutton $w.ctrl -relief raised -width 9 -menu $w.ctrl.m
-    menu $w.ctrl.m
+    frame $w.c
+    label $w.c.label -text "Control"
+    menubutton $w.c.ctrl -relief raised -width 9 -menu $w.c.ctrl.m
+    menu $w.c.ctrl.m
     foreach i $controls {
 	set label [lindex $i 0]
 	set type [lindex $i 1]
-	$w.ctrl.m add radio -label $label\
+	$w.c.ctrl.m add radio -label $label\
 		-variable curctrl -value $type\
-		-command [list NewControl $w $i]
+		-command [list NewControl $w.c $i]
 	set ctrlval($type) [lindex $i 2]
     }
-    $w.ctrl.m add separator
-    $w.ctrl.m add command -label "Reset" -command {ResetControls 1}
-    scale $w.val -orient horizontal -from 0 -to 127 -showvalue true\
+    $w.c.ctrl.m add separator
+    $w.c.ctrl.m add command -label "Reset" -command {ResetControls 1}
+    scale $w.c.val -orient horizontal -from 0 -to 127 -showvalue true\
 	    -command {SeqControl $curctrl}
-    NewControl $w [lindex $controls 0]
+    NewControl $w.c [lindex $controls 0]
+    pack $w.c.label $w.c.ctrl $w.c.val -side left -expand 1
 
-    pack $w.quit $w.off $w.ctrl $w.val -side left -expand 1
+    pack $w.chan $w.c -side left -expand 1
 
     #----------------------------------------------------------------
 
-    frame $pw.scale
-    set w $pw.scale
-    checkbutton $w.dispprog -text "Program" -variable dispprog\
-	    -command "ToggleDispProg $pw.prg"
-
-    label $w.klabel -text "KEY"
-    scale $w.key -orient horizontal\
+    set w $pw.keyvel
+    frame $w
+    frame $w.k
+    label $w.k.label -text "Key"
+    scale $w.k.val -orient horizontal\
 	    -from 0 -to 84 -resolution 12\
 	    -showvalue true -variable keybase
+    pack $w.k.label $w.k.val -side left -expand 1
 
-    label $w.vlabel -text "VEL"
-    scale $w.vel -orient horizontal\
+    frame $w.v
+    label $w.v.label -text "Velocity"
+    scale $w.v.val -orient horizontal\
 	    -from 0 -to 127\
 	    -showvalue true -variable keyvel
+    pack $w.v.label $w.v.val -side left -expand 1
 
-    pack $w.dispprog $w.klabel $w.key $w.vlabel $w.vel -side left -expand 1
+    pack $w.k $w.v -side left -expand 1
 
     #----------------------------------------------------------------
-    frame $pw.crp
-    set w $pw.crp
 
-    menubutton $w.chorus -relief raised -text "Chorus"\
-	    -menu $w.chorus.m
-    menu $w.chorus.m
-    $w.chorus.m add radio -label "Chorus 1"\
-	    -variable chorusmode -value 0 -command "SeqChorusMode 0"
-    $w.chorus.m add radio -label "Chorus 2"\
-	    -variable chorusmode -value 1 -command "SeqChorusMode 1"
-    $w.chorus.m add radio -label "Chorus 3"\
-	    -variable chorusmode -value 2 -command "SeqChorusMode 2"
-    $w.chorus.m add radio -label "Chorus 4"\
-	    -variable chorusmode -value 3 -command "SeqChorusMode 3"
-    $w.chorus.m add radio -label "Feedback"\
-	    -variable chorusmode -value 4 -command "SeqChorusMode 4"
-    $w.chorus.m add radio -label "Flanger"\
-	    -variable chorusmode -value 5 -command "SeqChorusMode 5"
-    $w.chorus.m add radio -label "Short Delay"\
-	    -variable chorusmode -value 6 -command "SeqChorusMode 6"
-    $w.chorus.m add radio -label "Short Delay 2"\
-	    -variable chorusmode -value 7 -command "SeqChorusMode 7"
-    set chorusmode 2
+    set w $pw.pitch
+    frame $w
 
-    menubutton $w.reverb -relief raised -text "Reverb"\
-	    -menu $w.reverb.m
-    menu $w.reverb.m
-    $w.reverb.m add radio -label "Room 1"\
-	    -variable reverbmode -value 0 -command "SeqReverbMode 0"
-    $w.reverb.m add radio -label "Room 2"\
-	    -variable reverbmode -value 1 -command "SeqReverbMode 1"
-    $w.reverb.m add radio -label "Room 3"\
-	    -variable reverbmode -value 2 -command "SeqReverbMode 2"
-    $w.reverb.m add radio -label "Hall 1"\
-	    -variable reverbmode -value 3 -command "SeqReverbMode 3"
-    $w.reverb.m add radio -label "Hall 2"\
-	    -variable reverbmode -value 4 -command "SeqReverbMode 4"
-    $w.reverb.m add radio -label "Plate"\
-	    -variable reverbmode -value 5 -command "SeqReverbMode 5"
-    $w.reverb.m add radio -label "Delay"\
-	    -variable reverbmode -value 6 -command "SeqReverbMode 6"
-    $w.reverb.m add radio -label "Panning Delay"\
-	    -variable reverbmode -value 7 -command "SeqReverbMode 7"
-    set reverbmode 4
-
-    button $w.label -text "ClrPitch" -command "set pitchbend 0; SeqBender 0"
+    global pitchbend
+    button $w.label -text "Pitch Clear" -command "set pitchbend 0; SeqBender 0"
     scale $w.pitch -orient horizontal -from -8192 -to 8192 -showvalue 0\
-	    -length 180 -variable pitchbend -command SeqBender
+	    -length 256 -variable pitchbend -command SeqBender
     set pitchbend 0
 
-    pack $w.chorus $w.reverb $w.label $w.pitch -side left -expand 1
+    pack $w.label $w.pitch -side left -expand 1
     
     #----------------------------------------------------------------
 
-    frame $pw.prg
-    set w $pw.prg
+    set w $pw.prog
+    frame $w
 
     my-listbox $w.p "Preset:" 28 10
     my-listbox $w.b "Bank:all" 5 10
@@ -458,11 +529,17 @@ proc PanelCreate {{pw ""}} {
 
     MakeLists $w
 
-    #----------------------------------------------------------------
-    pack $pw.scale $pw.btn $pw.crp -side top -fill x
-    pack $pw.kbd -fill x -side bottom
+    $pw. configure -menu $pw.menubar
 
-    ToggleDispProg $pw.prg
+    ToggleView $pw keyvel
+    ToggleView $pw ctrl
+    ToggleView $pw pitch
+    ToggleView $pw prog
+
+    #----------------------------------------------------------------
+
+    KeybdCreate $pw.kbd
+    pack $pw.kbd -fill x -side bottom -pady 1
 }
 
 
@@ -510,6 +587,40 @@ proc ParseOptions {argc argv} {
 }
 
 #
+# load config file
+#
+proc LoadConfig {fname} {
+    if {[file readable $fname]} {
+	source $fname
+    }
+}
+
+#
+# save config file
+#
+proc SaveConfig {fname} {
+    global disp keymap
+    set file [open $fname w]
+    if {$file == ""} {
+	tk_messageBox -icon error -message "can't open file $fname." -type ok
+	return
+    }
+    puts $file "global disp keymap"
+    puts $file "set disp(keyvel) $disp(keyvel)"
+    puts $file "set disp(ctrl) $disp(ctrl)"
+    puts $file "set disp(pitch) $disp(pitch)"
+    puts $file "set disp(prog) $disp(prog)"
+    puts $file "set keymap {"
+    foreach i $keymap {
+	set key [lindex $i 0]
+	set note [lindex $i 1]
+	puts $file "  {$key $note}"
+    }
+    puts $file "}"
+    close $file
+}
+
+#
 # read keymap file
 #
 proc ReadKeymap {fname} {
@@ -539,13 +650,16 @@ if {! [info exists optvar(libpath)]} {
     set optvar(libpath) "/etc"
 }
 
+set optvar(preset) [SearchDefault $defpresetfile]
+set optvar(config) [SearchDefault $defconfig]
+set optvar(channel) 0
+
 ParseOptions $argc $argv
 
-set optvar(presetfile) [SearchDefault $defpresetfile]
-set optvar(keymapfile) [SearchDefault $defkeymapfile]
+LoadConfig $optvar(config)
 
-ReadKeymap $optvar(keymapfile)
-
+InitPreset
+MenuCreate
 PanelCreate
 
 wm title . "Virtual Keyboard ver.1.7"

@@ -159,9 +159,9 @@ seq_on(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 		seq_opened = 1;
 		Tcl_SetVar(interp, "seqswitch", "1", TCL_GLOBAL_ONLY);
 		if (oper->program)
-			oper->program(private, seq_bank, seq_preset);
+			oper->program(interp, private, seq_bank, seq_preset);
 		if (oper->bender)
-			oper->bender(private, seq_bend);
+			oper->bender(interp, private, seq_bend);
 	}
 
 	return TCL_OK;
@@ -172,7 +172,7 @@ static int
 seq_off(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 {
 	if (seq_opened) {
-		oper->close(private);
+		oper->close(interp, private);
 		seq_opened = 0;
 		Tcl_SetVar(interp, "seqswitch", "0", TCL_GLOBAL_ONLY);
 	}
@@ -190,7 +190,7 @@ seq_start_note(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]
 	note = atoi(argv[1]);
 	vel = atoi(argv[2]);
 	if (oper->noteon)
-		oper->noteon(private, note, vel);
+		oper->noteon(interp, private, note, vel);
 	return TCL_OK;
 }
 
@@ -205,7 +205,7 @@ seq_stop_note(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 	note = atoi(argv[1]);
 	vel = atoi(argv[2]);
 	if (oper->noteoff)
-		oper->noteoff(private, note, vel);
+		oper->noteoff(interp, private, note, vel);
 	return TCL_OK;
 }
 
@@ -220,7 +220,7 @@ seq_control(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 	type = atoi(argv[1]);
 	val = atoi(argv[2]);
 	if (oper->control)
-		oper->control(private, type, val);
+		oper->control(interp, private, type, val);
 	return TCL_OK;
 }
 
@@ -234,7 +234,7 @@ seq_program(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 	if (! seq_opened)
 		return TCL_OK;
 	if (oper->program)
-		oper->program(private, seq_bank, seq_preset);
+		oper->program(interp, private, seq_bank, seq_preset);
 	return TCL_OK;
 }
 
@@ -247,7 +247,7 @@ seq_bender(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 	if (! seq_opened)
 		return TCL_OK;
 	if (oper->bender)
-		oper->bender(private, seq_bend);
+		oper->bender(interp, private, seq_bend);
 	return TCL_OK;
 }
 
@@ -258,10 +258,8 @@ seq_chorus_mode(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[
 		return TCL_ERROR;
 	if (seq_on(clientData, interp, argc, argv) != TCL_OK)
 		return TCL_ERROR;
-	if (oper->chorus_mode) {
-		int mode = atoi(argv[1]);
-		oper->chorus_mode(private, mode);
-	}
+	if (oper->chorus_mode)
+		oper->chorus_mode(interp, private, atoi(argv[1]));
 	return TCL_OK;
 }
 
@@ -272,10 +270,8 @@ seq_reverb_mode(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[
 		return TCL_ERROR;
 	if (seq_on(clientData, interp, argc, argv) != TCL_OK)
 		return TCL_ERROR;
-	if (oper->reverb_mode) {
-		int mode = atoi(argv[1]);
-		oper->reverb_mode(private, mode);
-	}
+	if (oper->reverb_mode)
+		oper->reverb_mode(interp, private, atoi(argv[1]));
 	return TCL_OK;
 }
 
@@ -295,6 +291,16 @@ vkb_error(Tcl_Interp *ip, char *fmt, ...)
 	va_end(ap);
 }
 
+int
+vkb_get_int(Tcl_Interp *ip, char *opt, int *ret)
+{
+	char *var;
+	if ((var = Tcl_GetVar2(ip, "optvar", opt, TCL_GLOBAL_ONLY)) != NULL && *var) {
+		*ret = atoi(var);
+		return 1;
+	}
+	return 0;
+}
 
 /*
  * Initialize Tcl/Tk components

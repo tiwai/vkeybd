@@ -37,14 +37,14 @@
  * functions
  */
 static int seq_open(Tcl_Interp *ip, void **private_return);
-static void seq_close(void *private);
-static void program(void *private, int bank, int preset);
-static void note_on(void *private, int note, int vel);
-static void note_off(void *private, int note, int vel);
-static void control(void *private, int type, int val);
-static void bender(void *private, int bend);
-static void chorus_mode(void *private, int mode);
-static void reverb_mode(void *private, int mode);
+static void seq_close(Tcl_Interp *ip, void *private);
+static void program(Tcl_Interp *ip, void *private, int bank, int preset);
+static void note_on(Tcl_Interp *ip, void *private, int note, int vel);
+static void note_off(Tcl_Interp *ip, void *private, int note, int vel);
+static void control(Tcl_Interp *ip, void *private, int type, int val);
+static void bender(Tcl_Interp *ip, void *private, int bend);
+static void chorus_mode(Tcl_Interp *ip, void *private, int mode);
+static void reverb_mode(Tcl_Interp *ip, void *private, int mode);
 
 /*
  * OSS sequencer stuff
@@ -132,8 +132,7 @@ seq_open(Tcl_Interp *ip, void **private_return)
 	}
 
 	awe_dev = -1;
-	if ((var = Tcl_GetVar2(ip, "optvar", "seqidx", TCL_GLOBAL_ONLY)) != NULL && *var)
-		awe_dev = atoi(var);
+	vkb_get_int(ip, "seqidx", &awe_dev);
 	if (awe_dev >= 0) {
 		card_info.device = awe_dev;
 		if (ioctl(seqfd, SNDCTL_SYNTH_INFO, &card_info) == -1) {
@@ -181,13 +180,13 @@ seq_open(Tcl_Interp *ip, void **private_return)
  * close device
  */
 static void
-seq_close(void *private)
+seq_close(Tcl_Interp *ip, void *private)
 {
 	close(seqfd);
 }
 
 static void
-program(void *private, int bank, int preset)
+program(Tcl_Interp *ip, void *private, int bank, int preset)
 {
 	SEQ_CONTROL(awe_dev, 0, CTL_BANK_SELECT, bank);
 	SEQ_SET_PATCH(awe_dev, 0, preset);
@@ -195,42 +194,42 @@ program(void *private, int bank, int preset)
 }
 
 static void
-note_on(void *private, int note, int vel)
+note_on(Tcl_Interp *ip, void *private, int note, int vel)
 {
 	SEQ_START_NOTE(awe_dev, 0, note, vel);
 	SEQ_DUMPBUF();
 }
 
 static void
-note_off(void *private, int note, int vel)
+note_off(Tcl_Interp *ip, void *private, int note, int vel)
 {
 	SEQ_STOP_NOTE(awe_dev, 0, note, vel);
 	SEQ_DUMPBUF();
 }
 
 static void
-control(void *private, int type, int val)
+control(Tcl_Interp *ip, void *private, int type, int val)
 {
 	SEQ_CONTROL(awe_dev, 0, type, val);
 	SEQ_DUMPBUF();
 }
 
 static void
-bender(void *private, int bend)
+bender(Tcl_Interp *ip, void *private, int bend)
 {
 	SEQ_BENDER(awe_dev, 0, bend + 8192);
 	SEQ_DUMPBUF();
 }
 
 static void
-chorus_mode(void *private, int mode)
+chorus_mode(Tcl_Interp *ip, void *private, int mode)
 {
 	AWE_CHORUS_MODE(awe_dev, mode);
 	SEQ_DUMPBUF();
 }
 
 static void
-reverb_mode(void *private, int mode)
+reverb_mode(Tcl_Interp *ip, void *private, int mode)
 {
 	AWE_REVERB_MODE(awe_dev, mode);
 	SEQ_DUMPBUF();

@@ -32,14 +32,14 @@
  */
 typedef struct vkb_oper_t {
 	int (*open)(Tcl_Interp *ip, void **private_return);
-	void (*close)(void *private);
-	void (*program)(void *private, int bank, int prg); /* bank=128: drum */
-	void (*noteon)(void *private, int note, int vel);
-	void (*noteoff)(void *private, int note, int vel);
-	void (*control)(void *private, int type, int val);
-	void (*bender)(void *private, int bend); /* -8192 to 8192 */
-	void (*chorus_mode)(void *private, int mode);
-	void (*reverb_mode)(void *private, int mode);
+	void (*close)(Tcl_Interp *ip, void *private);
+	void (*program)(Tcl_Interp *ip, void *private, int bank, int prg); /* bank=128: drum */
+	void (*noteon)(Tcl_Interp *ip, void *private, int note, int vel);
+	void (*noteoff)(Tcl_Interp *ip, void *private, int note, int vel);
+	void (*control)(Tcl_Interp *ip, void *private, int type, int val);
+	void (*bender)(Tcl_Interp *ip, void *private, int bend); /* -8192 to 8192 */
+	void (*chorus_mode)(Tcl_Interp *ip, void *private, int mode);
+	void (*reverb_mode)(Tcl_Interp *ip, void *private, int mode);
 } vkb_oper_t;
 
 /*
@@ -66,8 +66,6 @@ extern int vkb_num_devices;
 extern vkb_devinfo_t *vkb_device[];
 
 void vkb_error(Tcl_Interp *ip, char *fmt, ...);
-
-/* for OSS */
-int vkb_open_oss(Tcl_Interp *ip);
+int vkb_get_int(Tcl_Interp *ip, char *opt, int *ret);
 
 #endif

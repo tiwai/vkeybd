@@ -20,10 +20,13 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#define USE_COMPAT_CONST
+
 #include "vkb.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <string.h>
 #include <tk.h>
 
 #ifndef Tk_Main

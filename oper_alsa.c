@@ -33,7 +33,7 @@
 #include <alsa/asoundlib.h>
 #endif
 
-#if SND_LIB_MINOR >= 6
+#if SND_LIB_MAJOR > 0 || SND_LIB_MINOR >= 6
 #define snd_seq_flush_output(x) snd_seq_drain_output(x)
 #define snd_seq_set_client_group(x,name) /*nop*/
 #define my_snd_seq_open(seqp) snd_seq_open(seqp, "hw", SND_SEQ_OPEN_OUTPUT, 0)
@@ -162,7 +162,7 @@ seq_open(Tcl_Interp *ip, void **private_return)
 		if (*var == 'y' || *var == 'Y' || *var == '1') {
 			cca_client = cca_init (cca_args,
 					       "vkeybd",
-					       CCA_Use_Alsa, CCA_PROTOCOL_VERSION);
+					       my_client, CCA_PROTOCOL_VERSION);
 			if (cca_enabled (cca_client)) {
 				cca_event_t * event;
 				unsigned char id[2];

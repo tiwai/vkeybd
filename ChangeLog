@@ -1,3 +1,6 @@
+2003-11-20	ver.0.1.15
+	* fixed the compilation with ALSA 1.0.0.
+	* fix for ladcca-0.4.0 by Jacob Meuser.
 2003-08-19	ver.0.1.14
 	* added the support of standard "--x=y" style options.
 	* send program change immediately in ALSA mode.

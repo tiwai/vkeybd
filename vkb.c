@@ -26,6 +26,11 @@
 #include <stdlib.h>
 #include <tk.h>
 
+#ifndef Tk_Main
+#define Tk_Main(argc, argv, proc) \
+    Tk_MainEx(argc, argv, proc, Tcl_CreateInterp())
+#endif
+
 /*
  */
 

@@ -1,4 +1,4 @@
-%define ver	0.1.8
+%define ver	0.1.9
 
 Summary: Virtual Keyboard
 Name: vkeybd

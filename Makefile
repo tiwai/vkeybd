@@ -101,8 +101,8 @@ sftovkb: sftovkb.o sffile.o malloc.o fskip.o
 
 install: $(TARGETS) vkeybd.tcl vkeybd.list vkeybdmap*
 	mkdir -p $(DESTDIR)$(BIN_DIR)
-	install -c -s vkeybd $(DESTDIR)$(BIN_DIR)
-	install -c -s sftovkb $(DESTDIR)$(BIN_DIR)
+	install -c -m 755 vkeybd $(DESTDIR)$(BIN_DIR)
+	install -c -m 755 sftovkb $(DESTDIR)$(BIN_DIR)
 	rm -f $(DESTDIR)$(BIN_DIR)/vkeybd.tcl
 	mkdir -p $(DESTDIR)$(VKBLIB_DIR)
 	install -c -m 444 vkeybd.tcl $(DESTDIR)$(VKBLIB_DIR)
@@ -115,9 +115,9 @@ install-man:
 
 install-desktop:
 	mkdir -p $(DESTDIR)$(DATA_DIR)/applications
-	install -c vkeybd.desktop $(DESTDIR)$(DATA_DIR)/applications
+	install -c -m 644 vkeybd.desktop $(DESTDIR)$(DATA_DIR)/applications
 	mkdir -p $(DESTDIR)$(DATA_DIR)/pixmaps
-	install -c pixmaps/*.png $(DESTDIR)$(DATA_DIR)/pixmaps
+	install -c -m 644 pixmaps/*.png $(DESTDIR)$(DATA_DIR)/pixmaps
 
 install-all: install install-man install-desktop
 

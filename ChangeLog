@@ -1,3 +1,10 @@
+2004-08-31	ver.0.1.17
+	* bind left and right keys to shift keybase.
+	* removed 'q' key binding, added ctrl-q instead.
+	* save keymap file separately in ~/.vkeybdmap.
+	  default file is load from /usr/share/vkeybd/vkeybdmap.
+	* save octave value to the config file.
+
 2004-03-03	ver.0.1.16
 	* added desktop file and icon png files (courtesy of Ivo Clarysse).
 	* fixed fskip.c.

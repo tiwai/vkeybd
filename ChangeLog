@@ -1,3 +1,6 @@
+2004-03-03	ver.0.1.16
+	* added desktop file and icon png files (courtesy of Ivo Clarysse).
+
 2003-11-20	ver.0.1.15
 	* fixed the compilation with ALSA 1.0.0.
 	* fix for ladcca-0.4.0 by Jacob Meuser.

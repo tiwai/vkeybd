@@ -10,12 +10,12 @@ void fskip(int size, FILE *fd, int seekable)
 		fseek(fd, size, SEEK_CUR);
 	else {
 		char tmp[1024];
-		while (size >= sizeof(tmp)) {
-			fread(tmp, 1, sizeof(tmp), fd);
-			size -= sizeof(tmp);
+		while (size >= (int)sizeof(tmp)) {
+			size -= fread(tmp, 1, sizeof(tmp), fd);
+
 		}
-		if (size > 0)
-			fread(tmp, 1, size, fd);
+		while (size > 0)
+			size -= fread(tmp, 1, size, fd);
 	}
 }
 

@@ -163,6 +163,12 @@ seq_open(Tcl_Interp *ip, void **private_return)
 		drum_chan_no = atoi(var);
 	chan_no = inst_chan_no;
 
+	{
+		char tmp[128];
+		sprintf(tmp, "wm title . \"Virtual Keyboard ver.1.7 \\[%d:%d\\]\"", my_client, my_port);
+		Tcl_Eval(ip, tmp);
+	}
+
 	return 1;
 }
 

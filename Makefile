@@ -31,9 +31,9 @@ USE_ALSA = 1
 #
 # Tcl/Tk library -- depends on your distribution
 #
-TCLLIB = -ltcl
+TCLLIB = -ltcl8.3
 TCLINC =
-TKLIB = -L/usr/X11R6/lib -ltk
+TKLIB = -L/usr/X11R6/lib -ltk8.3
 TKINC =
 XLIB = -L/usr/X11R6/lib -lX11
 XINC = -I/usr/X11R6/include

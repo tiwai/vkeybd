@@ -674,7 +674,7 @@ InitPreset
 MenuCreate
 PanelCreate
 
-wm title . "Virtual Keyboard ver.0.1.9"
+wm title . "Virtual Keyboard ver.0.1.10"
 wm iconname . "Virtual Keyboard"
 
 SeqOn preinit

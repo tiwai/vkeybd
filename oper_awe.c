@@ -29,11 +29,10 @@
 #include <sys/ioctl.h>
 #ifdef __FreeBSD__
 #  include <machine/soundcard.h>
-#  include <awe_voice.h>
 #elif defined(linux)
 #  include <linux/soundcard.h>
-#  include <linux/awe_voice.h>
 #endif
+#include "awe_voice.h"
 
 /*
  * functions

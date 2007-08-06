@@ -1,3 +1,7 @@
+2007-08-06	ver.0.1.17b
+	* fix build without linux/awe_voice.h
+	* add COPTFLAGS to Makefile
+
 2005-01-13	ver.0.1.17a
 	* added french keyboard mapping by Jose JORGE
 

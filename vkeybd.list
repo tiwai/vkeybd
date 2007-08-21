@@ -1,0 +1,333 @@
+128 8 Room (SC-55)
+128 7 Room (SC-88)
+128 127 CM-64/32 Set (SC-55) 
+128 57 Rhythm FX (SC-88)
+128 56 SFX (SC-55)
+128 50 Kick & Snare (SC-88) 
+128 49 Ethnic (SC-88)
+128 48 Orchestra (SC-55)
+128 40 Brush (SC-55)
+128 32 Jazz (SC-55)
+128 26 Dance (SC-88)
+128 25 TR-909 (SC-55)
+128 24 Electronic (SC-55)
+128 16 Power (SC-55)
+128 1 Standard 2 (SC-88)
+128 0 Standard 1 (SC-55)
+0 123 Bird
+0 0 Piano 1
+0 1 Piano 2
+0 2 Piano 3
+0 3 Honky Tonk
+0 4 E.Piano 1
+0 5 E.Piano 2
+0 6 Harpsichord
+0 7 Clavinet
+0 8 Celesta
+0 9 Glockenspiel
+0 10 Music Box
+0 11 Vibraphone
+0 12 Marimba
+0 13 Xylophone
+0 14 Tubular Bells
+0 15 Dulcimer
+0 16 Organ 1
+0 17 Organ 2
+0 18 Organ 3
+0 19 Church Organ
+0 20 Reed Organ
+0 21 Accordion
+0 22 Harmonica
+0 23 Bandoneon
+0 24 Nylon Guitar
+0 25 Steel Guitar
+0 26 Jazz Guitar
+0 27 Clean Guitar
+0 28 Guitar Mutes
+0 29 Overdrive Guitar
+0 30 DistortionGuitar
+0 31 Guitar Harmonics
+0 32 Acoustic Bass
+0 33 Fingered Bass
+0 34 Picked Bass
+0 35 Fretless Bass
+0 36 Slap Bass 1
+0 37 Slap Bass 2
+0 38 Synth Bass 1
+0 39 Synth Bass 2
+0 40 Violin
+0 41 Viola
+0 42 Cello
+0 43 Contrabass
+0 44 Tremolo Strings
+0 45 Pizzicato
+0 46 Harp
+0 47 Timpani
+0 48 Strings
+0 49 Slow Strings
+0 50 Synth Strings 1
+0 51 Synth Strings 2
+0 52 Choir Aahs
+0 53 Voice Oohs
+0 54 Synth Vox
+0 55 Orchestra Hit
+0 56 Trumpet
+0 57 Trombone
+0 58 Tuba
+0 59 Mute Trumpet
+0 60 French Horns
+0 61 Brass
+0 62 Synth Brass 1
+0 63 Synth Brass 2
+0 64 Soprano Sax
+0 65 Alto Sax
+0 66 Tenor Sax
+0 67 Baritone Sax
+0 68 Oboe
+0 69 English Horn
+0 70 Bassoon
+0 71 Clarinet
+0 72 Piccolo
+0 73 Flute
+0 74 Recorder
+0 75 Pan Flute
+0 76 Bottle Chiff
+0 77 Shakuhachi
+0 78 Whistle
+0 79 Ocarina
+0 80 Square Wave
+0 81 Saw Wave
+0 82 Synth Calliope
+0 83 Chiffer Lead
+0 84 Charang
+0 85 Solo Vox
+0 86 5th Saw Wave
+0 87 Bass & Lead
+0 88 Fantasia
+0 89 Warm Pad
+0 90 Poly Synth
+0 91 Space Voice
+0 92 Bowed Glass
+0 93 Metal Pad
+0 94 Halo Pad
+0 95 Sweep Pad
+0 96 Ice Rain
+0 97 Soundtrack
+0 98 Crystal
+0 99 Atmosphere
+0 100 Brightness
+0 101 Goblin
+0 102 Echo Drops
+0 103 Star Theme
+0 104 Sitar
+0 105 Banjo
+0 106 Shamisen
+0 107 Koto
+0 108 Kalimba
+0 109 Bagpipe
+0 110 Fiddle
+0 111 Shenai
+0 112 Tinker Bell
+0 113 Agogo
+0 114 Steel Drum
+0 115 Wood Block
+0 116 Taiko Drum
+0 117 Melodic Tom
+0 118 Synth Drum
+0 119 Reverse Cymbal
+0 120 Fret Noise
+0 121 Breath Noise
+0 122 Seashore
+0 124 Telephone
+0 125 Helicopter
+0 126 Applause
+0 127 Gunshot
+1 120 Cut Noise
+2 120 String Slap
+1 121 Fl. Key Click
+1 122 Rain
+2 122 Thunder
+3 122 Wind
+4 122 Stream
+5 122 Bubble
+1 123 Dog
+2 123 Horse-Gallop
+1 124 Telephone 2
+2 124 Door Creaking
+3 124 Door
+4 124 Scratch
+5 124 Windchime
+1 125 Car-Engine
+2 125 Car-Stop
+3 125 Car-Pass
+4 125 Car-Crash
+5 125 Siren
+6 125 Train
+7 125 Jetplane
+8 125 Starship
+9 125 Burst Noise
+1 126 Laughing
+2 126 Screaming
+3 126 Punch
+4 126 Heart Beat
+5 126 Footsteps
+1 127 Machine Gun
+2 127 Lasergun
+3 127 Explosion
+8 4 Detuned Rhodes
+8 5 Detuned EP2
+8 6 Coupled Harpsichord
+8 14 Church Bell
+8 16 Detuned Organ 1
+8 17 Detuned Organ 2
+8 19 Detuned Organ 3
+8 21 Italian Accordion
+8 24 Ukulele
+8 25 12 St. Guitar
+16 25 Mandolin
+8 26 Hawaiian Guitar
+8 27 Chorus Guitar
+8 28 Funk Guitar
+8 30 FeedBack Guitar
+8 31 Guitar Feedback
+8 38 SynthBass 3
+8 39 SynthBass 4
+8 48 Orchestra Pad
+8 50 Syn Strings 3
+8 61 Brass 2
+8 62 Synth Brass 3
+8 63 Synth Brass 4
+8 80 Sine Wave
+8 107 Taisho Koto
+8 115 Castanets
+8 116 Concert BD
+8 117 Melo Tom 2
+8 118 808 Tom
+127 0 Acou Piano 1
+127 1 Acou Piano 2
+127 2 Acou Piano 3
+127 3 Elec Piano 1
+127 4 Elec Piano 2
+127 5 Elec Piano 3
+127 6 Elec Piano 4
+127 7 Honky Tonk MT
+127 8 Elec Organ 1
+127 9 Elec Organ 2
+127 10 Elec Organ 3
+127 11 Elec Organ 4
+127 12 Pipe Organ 1
+127 13 Pipe Organ 2
+127 14 Pipe Organ 3
+127 15 Accordion MT
+127 16 Harpsichord 1
+127 17 Harpsichord 2
+127 18 Harpsichord 3
+127 19 Clavinet 1
+127 20 Clavinet 2
+127 21 Clavinet 3
+127 22 Celesta 1
+127 23 Celesta 2
+127 24 Syn Brass 1 MT
+127 25 Syn Brass 2 MT
+127 26 Syn Brass 3 MT
+127 27 Syn Brass 4 MT
+127 28 Syn Bass 1 MT
+127 29 Syn Bass 2 MT
+127 30 Synth Bass 3
+127 31 Synth Bass 4
+127 32 Fantasy MT
+127 33 Harmo Pad
+127 34 Choral
+127 35 Glasses
+127 36 Soundtrack MT
+127 37 Atmosphere MT
+127 38 Warm Bell
+127 39 Funny Vox
+127 40 Echo Bell
+127 41 Ice Rain MT
+127 42 Oboe 2001
+127 43 Echo Pan
+127 44 Dr Solo
+127 45 School Daze
+127 46 Bellsinger
+127 47 Square Wave MT
+127 48 String Sect 1
+127 49 String Sect 2
+127 50 String Sect 3
+127 51 Pizzicato MT
+127 52 Violin 1
+127 53 Violin 2
+127 54 Cello 1
+127 55 Cello 2
+127 56 Contrabass MT
+127 57 Harp 1
+127 58 Harp 2
+127 59 Guitar 1
+127 60 Guitar 2
+127 61 Elec Guit 1
+127 62 Elec Guit 2
+127 63 Sitar MT
+127 64 Acoustic Bass 1
+127 65 Acoustic Bass 2
+127 66 Elec Bass 1
+127 67 Elec Bass 2
+127 68 Slap Bass 1 MT
+127 69 Slap Bass 2 MT
+127 70 Fretless Bass 1
+127 71 Fretless Bass 2
+127 72 Flute 1
+127 73 Flute 2
+127 74 Piccolo 1
+127 75 Piccolo 2
+127 76 Recorder MT
+127 77 Pan Pipes MT
+127 78 Sax 1
+127 79 Sax 2
+127 80 Sax 3
+127 81 Sax 4
+127 82 Clarinet 1
+127 83 Clarinet 2
+127 84 Oboe MT
+127 85 English Horn MT
+127 86 Bassoon MT
+127 87 Harmonica MT
+127 88 Trumpet 1
+127 89 Trumpet 2
+127 90 Trombone 1
+127 91 Trombone 2
+127 92 French Horn 1
+127 93 French Horn 2
+127 94 Tuba MT
+127 95 Brass Sect 1
+127 96 Brass Sect 2
+127 97 Vibraphone 1
+127 98 Vibraphone 2
+127 99 Synth Mallet
+127 100 Wind Chime
+127 101 Glockenspiel MT
+127 102 Tube Bell
+127 103 Xyolophone MT
+127 104 Marimba MT
+127 105 Koto MT
+127 106 Sho
+127 107 Shakuhachi MT
+127 108 Whistle 1
+127 109 Whistle 2
+127 110 Bottle Blow
+127 111 Breath Pipe
+127 112 Timpani MT
+127 113 Melodic Tom MT
+127 114 Deep Snare
+127 115 Elec Perc 1
+127 116 Elec Perc 2
+127 117 Taiko
+127 118 Taiko Rim
+127 119 Cymbal
+127 120 Castanets MT
+127 121 Triangle
+127 122 Orche Hit
+127 123 Telephone MT
+127 124 Bird Tweet
+127 125 One Note Jam
+127 126 Water Bell
+127 127 Jungle Tune

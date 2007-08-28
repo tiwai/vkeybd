@@ -2,7 +2,7 @@
 #
 # Virtual Tiny Keyboard
 #
-# Copyright (c) 1997-2000 by Takashi Iwai
+# Copyright (c) 1997-2007 by Takashi Iwai
 #
 # turn off auto-repeat on your X display by "xset -r"
 #
@@ -646,6 +646,61 @@ proc SearchDefault {fname} {
     return $path
 }
 
+# for keymap; check $LANG for the system-wide configurations
+proc SearchDefaultLang {fname} {
+    global env optvar
+
+    proc CheckDefaultPath {fname lang} {
+	global env optvar
+	if {[info exists env(VKEYBD)]} {
+	    set path "$env(VKEYBD)/$fname$lang"
+	    if {[file readable $path]} {
+		return $path
+	    }
+	}
+	set path "$optvar(libpath)/$fname$lang"
+	if {[file readable $path]} {
+	    return $path
+	}
+	return ""
+    }
+
+    set path "$env(HOME)/$fname"
+    if {[file readable $path]} {
+	return $path
+    }
+    set path "$env(HOME)/.$fname"
+    if {[file readable $path]} {
+	return $path
+    }
+
+    set lang [string trim $env(LANG) .]
+    switch -glob $lang {
+	[a-z][a-z] {set lang "-$lang"}
+	[a-z][a-z]_[A-Z][A-Z]* {set lang [string range "-$lang" 0 5]}
+	default {set lang ""}
+    }
+    set path [CheckDefaultPath $fname $lang]
+    if {$path != ""} {
+	return $path
+    }
+    if {[string match "-*_*" $lang]} {
+	set lang [string range $lang 0 2]
+	set path [CheckDefaultPath $fname $lang]
+	if {$path != ""} {
+	    return $path
+	}
+    }
+    if {$lang != ""} {
+	set path [CheckDefaultPath $fname ""]
+	if {$path != ""} {
+	    return $path
+	}
+    }
+    set path "$optvar(libpath)/$fname"
+    return $path
+}
+
 #
 # parse command line options
 #
@@ -759,7 +814,7 @@ if {! [info exists optvar(libpath)]} {
 
 set optvar(preset) [SearchDefault $defpresetfile]
 set optvar(config) [SearchDefault $defconfig]
-set optvar(keymap) [SearchDefault $defkeymap]
+set optvar(keymap) [SearchDefaultLang $defkeymap]
 set optvar(channel) 0
 
 ParseOptions $argc $argv
@@ -774,7 +829,7 @@ InitPreset
 MenuCreate
 PanelCreate
 
-wm title . "Virtual Keyboard ver.0.1.17"
+wm title . "Virtual Keyboard ver.0.1.18"
 wm iconname . "Virtual Keyboard"
 
 SeqOn preinit

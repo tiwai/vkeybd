@@ -1,5 +1,5 @@
 ====================================================================
-		VIRTUAL KEYBOARD ver.0.1.17
+		VIRTUAL KEYBOARD ver.0.1.18
 		Takashi Iwai  <tiwai@suse.de>
 ====================================================================
 
@@ -81,6 +81,8 @@ Common Options:
 	Default is alsa.
   --config file
 	Use the specified file as config file (see below)
+  --keymap file
+	Use the specified file as keymap file (see below)
   --preset file
 	Use the specified file as preset list file (see below)
   --channel num
@@ -183,6 +185,18 @@ assigned key, and note offset is the shifted note number from note key
 of beginning of keyboard, which is changed by "Key" scalebar.
 See the next section for details.
 
+KEYMAP FILE
+-----------
+
+The keymap file can be specified via the command line option
+--keymap.  If not given, the default keymap file is searched from
+the home directory (~/vkeybdmap or ~/.vkeybdmap) and the system-wide
+directory (/etc/vkeybdmap).
+
+The system-wide keymap is locale-sensitive now.  A file
+vkeybdmap-$LANG is searched in prior.  For example, /etc/vkeybdmap-de
+can be used for the german locale.
+
 CHANGING THE KEYMAP
 -------------------
 
@@ -259,7 +273,7 @@ The desktop pixmaps are by courtesy of Ivo Clarysse.
 COPYRIGHT
 ---------
 
-Copyright (C) 1997-2000 Takashi Iwai
+Copyright (C) 1997-2007 Takashi Iwai
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

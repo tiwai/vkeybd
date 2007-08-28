@@ -1,3 +1,8 @@
+2007-08-28	ver.0.1.18
+	* add Spanish keymap by Pedro Lopez-Cabanillas
+	* parse locale-sensitive keymap file for the system-wide config
+	* slightly fix documents
+
 2007-08-06	ver.0.1.17b
 	* fix build without linux/awe_voice.h
 	* add COPTFLAGS to Makefile

@@ -23,8 +23,8 @@
 
 #include <tcl.h>
 
-#ifdef HAVE_LADCCA
-#include <ladcca/ladcca.h>
+#ifdef HAVE_LASH
+#include <lash/lash.h>
 #endif
 
 #ifndef VKB_TCLFILE
@@ -72,8 +72,8 @@ extern vkb_devinfo_t *vkb_device[];
 void vkb_error(Tcl_Interp *ip, char *fmt, ...);
 int vkb_get_int(Tcl_Interp *ip, char *opt, int *ret);
 
-#ifdef HAVE_LADCCA
-extern cca_args_t *cca_args;
+#ifdef HAVE_LASH
+extern lash_args_t *lash_args;
 #endif
 
 #endif

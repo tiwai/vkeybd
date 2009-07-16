@@ -64,8 +64,8 @@ static int seq_bank = 0, seq_preset = 0;
 static int seq_bend = 0;
 static vkb_oper_t *oper;
 
-#ifdef HAVE_LADCCA	
-cca_args_t * cca_args = NULL;
+#ifdef HAVE_LASH	
+lash_args_t * lash_args = NULL;
 #endif
  
 /*
@@ -77,9 +77,9 @@ int main(int argc, char **argv)
 	char **nargv;
 	int c, nargc;
 
-#ifdef HAVE_LADCCA	
-	cca_args = cca_extract_args(&argc, &argv);
-#endif /* HAVE_LADCCA */
+#ifdef HAVE_LASH	
+	lash_args = lash_extract_args(&argc, &argv);
+#endif /* HAVE_LASH */
 
 	nargc = argc + 1;
 	if ((nargv = (char**)malloc(sizeof(char*) * nargc)) == NULL) {

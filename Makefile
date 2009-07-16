@@ -30,7 +30,7 @@ VKBLIB_DIR = $(DATA_DIR)/vkeybd
 USE_AWE = 1
 USE_MIDI = 1
 USE_ALSA = 1
-USE_LADCCA = 0
+USE_LASH = 0
 
 #
 # Tcl/Tk library -- depends on your distribution
@@ -68,14 +68,14 @@ EXTRALIB += -lasound
 endif
 
 #
-# LADCCA stuff
+# LASH stuff
 #
-ifeq (1,$(USE_LADCCA))
-LADCCACFLAGS = $(shell pkg-config --cflags ladcca-1.0) \
-	       $(shell pkg-config --exists ladcca-1.0 && echo "-DHAVE_LADCCA" )
-LADCCALIBS   = $(shell pkg-config --libs ladcca-1.0)
-DEVICES += $(LADCCACFLAGS)
-EXTRALIB += $(LADCCALIBS)
+ifeq (1,$(USE_LASH))
+LASHCFLAGS = $(shell pkg-config --cflags lash-1.0) \
+	       $(shell pkg-config --exists lash-1.0 && echo "-DHAVE_LASH" )
+LASHLIBS   = $(shell pkg-config --libs lash-1.0)
+DEVICES += $(LASHCFLAGS)
+EXTRALIB += $(LASHLIBS)
 endif
 
 #----------------------------------------------------------------
@@ -88,7 +88,7 @@ COPTFLAGS = -Wall -O
 CFLAGS = $(COPTFLAGS) -DVKB_TCLFILE=\"$(VKB_TCLFILE)\" \
 	-DVKBLIB_DIR=\"$(VKBLIB_DIR)\"\
 	-DVERSION_STR=\"$(VERSION)\"\
-	$(DEVICES) $(XINC) $(TCLINC) $(TKINC) $(LADCCACFLAGS)
+	$(DEVICES) $(XINC) $(TCLINC) $(TKINC) $(LASHCFLAGS)
 
 TARGETS = vkeybd sftovkb
 

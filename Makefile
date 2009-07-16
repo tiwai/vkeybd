@@ -95,10 +95,10 @@ TARGETS = vkeybd sftovkb
 all: $(TARGETS)
 
 vkeybd: vkb.o vkb_device.o $(DEVOBJS) $(EXTRAOBJS)
-	$(CC) -o $@ $^ $(TKLIB) $(TCLLIB) $(XLIB) $(EXTRALIB) -lm
+	$(CC) $(LDFLAGS) -o $@ $^ $(TKLIB) $(TCLLIB) $(XLIB) $(EXTRALIB) -lm
 
 sftovkb: sftovkb.o sffile.o malloc.o fskip.o
-	$(CC) -o $@ $^ -lm
+	$(CC) $(LDFLAGS) -o $@ $^ -lm
 
 install: $(TARGETS) vkeybd.tcl vkeybd.list vkeybdmap*
 	mkdir -p $(DESTDIR)$(BIN_DIR)

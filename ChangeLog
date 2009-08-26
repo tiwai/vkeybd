@@ -1,3 +1,7 @@
+2009-07-16	ver.0.1.18c
+	* LASH support (deprecated LADCCA) by Samuli Suominen
+	* Add the reference to $(LDFLAGS) to Makefile
+
 2008-04-17	ver.0.1.18b
 	* improved vkeybd.desktop (by Antonio Bonifati)
 

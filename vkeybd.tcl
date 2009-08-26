@@ -96,8 +96,13 @@ proc KeybdCreate {w} {
     foreach i $keymap {
 	set key [lindex $i 0]
 	set note [lindex $i 1]
-	bind $w <KeyPress-$key> [list KeyQueue 1 $note 0]
-	bind $w <KeyRelease-$key> [list KeyQueue 0 $note 0]
+	bind . <KeyPress-$key> [list KeyQueue 1 $note 0]
+	bind . <KeyRelease-$key> [list KeyQueue 0 $note 0]
+	set upperkey [string toupper $key]
+	if {[string length $key] == 1 && $upperkey != $key} {
+	    bind . <KeyPress-$upperkey> [list KeyQueue 1 $note 0]
+	    bind . <KeyRelease-$upperkey> [list KeyQueue 0 $note 0]
+	}
     }
 
     #
@@ -172,10 +177,12 @@ set activekey ""
 proc KeyStart {key button} {
     global keybase keywin keyitem keyvel activekey
     SeqOn
-    if {$button == 1} {
-	set activekey $keyitem($key)
+    catch {
+	if {$button == 1} {
+	    set activekey $keyitem($key)
+	}
+	$keywin itemconfigure $keyitem($key) -fill blue
     }
-    $keywin itemconfigure $keyitem($key) -fill blue
     set key [expr $key + $keybase]
     SeqStartNote $key $keyvel
 }
@@ -183,11 +190,13 @@ proc KeyStart {key button} {
 proc KeyStop {key button} {
     global keybase keywin keyitem keyindex keycolor activekey
     SeqOn
-    if {$button == 1 && $activekey != ""} {
-	set key $keyindex($activekey)
-	set activekey ""
+    catch {
+	if {$button == 1 && $activekey != ""} {
+	    set key $keyindex($activekey)
+	    set activekey ""
+	}
+	$keywin itemconfigure $keyitem($key) -fill $keycolor($key)
     }
-    $keywin itemconfigure $keyitem($key) -fill $keycolor($key)
     set key [expr $key + $keybase]
     SeqStopNote $key 0
 }

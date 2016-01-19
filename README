@@ -71,7 +71,7 @@ USAGE
 
 Load the soundfont via sfxload utility before using this program.
 Then, just start vkeybd.  The following command line options are
-accpted.
+accepted.
 
 Common Options:
   --device mode
@@ -122,7 +122,7 @@ OSS Sequencer Device Option:
 
 MIDI Device Option:
   --mididev file
-	Speicfy the file path of MIDI device.
+	Specify the file path of MIDI device.
 	Default value is /dev/midi.
 
 
@@ -143,7 +143,7 @@ invoke.
 VIEW MENU
 ---------
 
-Thie menu shows the check buttons to toggle the display of control
+This menu shows the check buttons to toggle the display of control
 buttons.
 
 With "Key/Velocity" button, a key and a velocity scale bars are
@@ -200,7 +200,7 @@ can be used for the german locale.
 CHANGING THE KEYMAP
 -------------------
 
-The step for changing the keymap manually is like this.
+The steps for changing the keymap manually are like this.
 
 1. Save the current configuration by "File / Save Keymap" menu.
    You'll have ~/.vkeybdmap file.
@@ -252,7 +252,7 @@ PRESET LIST FILE
 
 The preset list file is used to describe the list of MIDI preset
 names.  If the command line option is omitted, the default preset list
-file "~/vkeybd.list", "~/.vkeybd.list" and "$vkblib/vkeybd.list" are
+files "~/vkeybd.list", "~/.vkeybd.list" and "$vkblib/vkeybd.list" are
 searched sequentially.  The preset list will appear when "Program"
 toggle button is on, and you can select your favorite sound from the
 list.

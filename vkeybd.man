@@ -1,5 +1,4 @@
 .TH vkeybd 1 "January 1, 2000"
-.LO 1
 .SH NAME
 vkeybd \- virtual keyboard on X
 
@@ -79,7 +78,7 @@ is used.
 .B \--seqidx num
 Specify the synth device index for AWE32/64 WaveTable.
 If negative value is given, the device is auto-probed.
-Default value is -1.
+Default value is \-1.
 
 .SS "MIDI Device Option"
 .TP
@@ -151,10 +150,10 @@ X display via
 .B xset(1)
 :
 .IP "" 4
-% xset -r
+% xset \-r
 .PP
 
-The key assignment can be changed by editting the config file
+The key assignment can be changed by editing the config file
 .B ~/.vkeybdrc.
 Once save the current configuration via
 .I "File/Save Config"

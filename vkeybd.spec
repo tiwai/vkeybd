@@ -17,7 +17,7 @@ URL: http//members.tripod.de/iwai/awedrv.html
 
 This is a virtual keyboard for AWE, MIDI and ALSA drivers.
 It's a simple fake of a MIDI keyboard on X-windows system.
-Enjoy a music with your mouse and "computer" keyboard :-)
+Enjoy music with your mouse and "computer" keyboard :-)
 
 The program requires Tcl7.5/Tk4.1 or newer libraries.
 This program supports:
@@ -50,7 +50,7 @@ rm -rf $RPM_BUILD_ROOT
 
 This is a virtual keyboard for AWE, MIDI and ALSA drivers.
 It's a simple fake of a MIDI keyboard on X-windows system.
-Enjoy a music with your mouse and "computer" keyboard :-)
+Enjoy music with your mouse and "computer" keyboard :-)
 
 The program requires Tcl7.5/Tk4.1 or newer libraries.
 This program supports:
@@ -64,7 +64,7 @@ This program supports:
 
 This is a virtual keyboard for AWE, MIDI and ALSA drivers.
 It's a simple fake of a MIDI keyboard on X-windows system.
-Enjoy a music with your mouse and "computer" keyboard :-)
+Enjoy music with your mouse and "computer" keyboard :-)
 
 The program requires Tcl7.5/Tk4.1 or newer libraries.
 This program supports:

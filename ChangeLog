@@ -1,3 +1,9 @@
+2024-03-29	ver.0.1.18e
+	* README and manpage updates
+	* Send both MSB (CC#0) and LSB (CC#32) for bank selection in
+	  alsa-seq mode;
+	  there is a new option --bankmsb to keep the old behavior
+
 2009-08-26	ver.0.1.18d
 	* Two Debian fixes regarding keyboard inputs (527942, 527943)
 	  http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=527942

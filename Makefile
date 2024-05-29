@@ -3,7 +3,7 @@
 # copyright (c) 1997-2000 by Takashi Iwai
 #
 
-VERSION = 0.1.18d
+VERSION = 0.1.18e
 
 #
 # installation directory

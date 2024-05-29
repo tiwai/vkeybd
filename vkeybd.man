@@ -66,6 +66,11 @@ Default is 's'.
 Specify the name of client/port.  Some applications like tk707
 check the client/port name whether it is a valid MIDI device port.
 This options makes vkeybd possible to "fake" as a real MIDI device.
+.TP
+.B \--bankmsb 0|1
+Specify whether the bank selection control is sent only to MSB or both
+MSB/LSB. Default is 0, sent to both MSB/LSB.
+This option is provided only for compatibility with older versions.
 
 .SS "OSS Sequencer Device Options"
 .TP

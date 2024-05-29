@@ -78,6 +78,7 @@ static vkb_oper_t alsa_oper = {
 static vkb_optarg_t alsa_opts[] = {
 	{"addr", "subscriber", "--addr client:port or 'subscriber' : ALSA sequencer destination"},
 	{"name", DEFAULT_NAME, "--name string : use the specified string as client/port names"},
+	{"bankmsb", "0", "--bankmsb 0 or 1: pass the bank selection only to CC#0"},
 #ifdef HAVE_LASH	
 	{"lash", "no", "--lash <yes|no> : support LASH (default = no)"},
 #endif
@@ -99,6 +100,7 @@ static snd_seq_t *seq_handle = NULL;
 static int my_client, my_port;
 static int seq_client, seq_port;
 static int chan_no;
+static int bankmsb;
 
 #ifdef HAVE_LASH	
 static lash_client_t * lash_client = NULL;
@@ -176,6 +178,11 @@ seq_open(Tcl_Interp *ip, void **private_return)
 	}
 #endif /* HAVE_LASH */
  
+	if ((var = Tcl_GetVar2(ip, "optvar", "bankmsb", TCL_GLOBAL_ONLY)) != NULL) {
+		if (!strcmp(var, "1"))
+			bankmsb = 1;
+	}
+
 	/* set client info */
 	if ((var = Tcl_GetVar2(ip, "optvar", "name", TCL_GLOBAL_ONLY)) != NULL)
 		snd_seq_set_client_name(seq_handle, var);
@@ -274,8 +281,13 @@ program(Tcl_Interp *ip, void *private, int bank, int preset)
 	vkb_get_int(ip, "channel", &chan_no);
 	if (bank == 128)
 		vkb_get_int(ip, "drum", &chan_no);
-	else {
-		snd_seq_ev_set_controller(&ev, 0, 0, bank);
+	else if (bankmsb) {
+		snd_seq_ev_set_controller(&ev, chan_no, 0, bank);
+		send_event(0);
+	} else {
+		snd_seq_ev_set_controller(&ev, chan_no, 0, (bank >> 7) & 127);
+		send_event(0);
+		snd_seq_ev_set_controller(&ev, chan_no, 32, bank & 127);
 		send_event(0);
 	}
 

@@ -114,20 +114,19 @@ static lash_client_t * lash_client = NULL;
 
 static int parse_addr(const char *arg, int *client, int *port)
 {
-	char *p;
+	snd_seq_addr_t addr;
 
-	if (isdigit(*arg)) {
-		if ((p = strpbrk(arg, ADDR_DELIM)) == NULL)
-			return -1;
-		*client = atoi(arg);
-		*port = atoi(p + 1);
-	} else {
-		if (*arg == 's' || *arg == 'S') {
-			*client = SND_SEQ_ADDRESS_SUBSCRIBERS;
-			*port = 0;
-		} else
-			return -1;
+	if (!strcasecmp(arg, "s") || !strcasecmp(arg, "subscribers")) {
+		*client = SND_SEQ_ADDRESS_SUBSCRIBERS;
+		*port = 0;
+		return 0;
 	}
+
+	if (snd_seq_parse_address(seq_handle, &addr, arg) < 0)
+		return -1;
+
+	*client = addr.client;
+	*port = addr.port;
 	return 0;
 }
 
@@ -142,17 +141,17 @@ seq_open(Tcl_Interp *ip, void **private_return)
 	const char *var, *name;
 	unsigned int caps;
 
+	if (my_snd_seq_open(&seq_handle) < 0) {
+		vkb_error(ip, "can't open sequencer device");
+		return 0;
+	}
+
 	/* copy from Tcl variables */
 	if ((var = Tcl_GetVar2(ip, "optvar", "addr", TCL_GLOBAL_ONLY)) != NULL) {
 		if (parse_addr(var, &seq_client, &seq_port) < 0) {
 			vkb_error(ip, "invalid argument --addr %s\n", var);
 			return 0;
 		}
-	}
-	
-	if (my_snd_seq_open(&seq_handle) < 0) {
-		vkb_error(ip, "can't open sequencer device");
-		return 0;
 	}
 
 	/* get my client id */

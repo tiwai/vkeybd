@@ -1,3 +1,7 @@
+2025-05-12	ver.0.1.18f
+	* Allow to pass a client name string and omit a port number to
+	  --addr option
+
 2024-03-29	ver.0.1.18e
 	* README and manpage updates
 	* Send both MSB (CC#0) and LSB (CC#32) for bank selection in

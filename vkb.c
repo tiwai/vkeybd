@@ -171,14 +171,15 @@ seq_on(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 	if (argc > 1 && vkb_device[i]->delayed_open)
 		return TCL_OK;
 
-	if (oper->open(interp, &private)) {
-		seq_opened = 1;
-		Tcl_SetVar(interp, "seqswitch", "1", TCL_GLOBAL_ONLY);
-		if (oper->program)
-			oper->program(interp, private, seq_bank, seq_preset);
-		if (oper->bender)
-			oper->bender(interp, private, seq_bend);
-	}
+	if (oper->open(interp, &private) <= 0)
+		return TCL_ERROR;
+
+	seq_opened = 1;
+	Tcl_SetVar(interp, "seqswitch", "1", TCL_GLOBAL_ONLY);
+	if (oper->program)
+		oper->program(interp, private, seq_bank, seq_preset);
+	if (oper->bender)
+		oper->bender(interp, private, seq_bend);
 
 	return TCL_OK;
 }

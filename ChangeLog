@@ -1,3 +1,7 @@
+2025-09-16	ver.0.1.18g
+	* Fix the regression of --addr option handling (bsc#1249755)
+	* Really abort the program if the open fails
+
 2025-05-12	ver.0.1.18f
 	* Allow to pass a client name string and omit a port number to
 	  --addr option

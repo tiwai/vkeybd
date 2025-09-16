@@ -76,7 +76,7 @@ static vkb_oper_t alsa_oper = {
 };
 
 static vkb_optarg_t alsa_opts[] = {
-	{"addr", "subscriber", "--addr client:port or 'subscriber' : ALSA sequencer destination"},
+	{"addr", "subscribers", "--addr client:port or 'subscriber' : ALSA sequencer destination"},
 	{"name", DEFAULT_NAME, "--name string : use the specified string as client/port names"},
 	{"bankmsb", "0", "--bankmsb 0 or 1: pass the bank selection only to CC#0"},
 #ifdef HAVE_LASH	
